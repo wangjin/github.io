@@ -73,8 +73,8 @@ $ keytool -importcert -keystore server.jks -file ca.crt
 
 ``` properties
 server.ssl.key-store=classpath:证书.jks
-server.ssl.key-store-password=证书密码
-server.ssl.key-password=证书密码
+server.ssl.key-store-password=创建证书时设定的密码
+server.ssl.key-password=创建证书时设定的密码
 ```
 
 # 总结
