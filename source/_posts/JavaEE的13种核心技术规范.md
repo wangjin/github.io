@@ -2,6 +2,8 @@
 title: JavaEE的13种核心技术规范
 date: 2017-04-11 21:11:39
 tags:
+- Java
+- JavaEE
 ---
 
 # JDBC（Java Database）数据库连接
