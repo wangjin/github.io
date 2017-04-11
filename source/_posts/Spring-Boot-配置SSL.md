@@ -79,4 +79,4 @@ server.ssl.key-password=证书密码
 
 # 总结
 - crt、jks、pkcs12都是保存证书的不同格式，不同的应用服务器可能会使用不同格式的证书文件
-- OpenSSl、Keytool都可以用来生成证书，其中OpenSSl功能更多更复杂，keytool随JDK中自带的
+- OpenSSl、Keytool都可以用来生成证书，其中OpenSSl功能更多更复杂，keytool是JDK中自带的
