@@ -36,7 +36,7 @@ $ nvm ls
 $ nvm alias default v7.8.0
 ```
 
-# 查看Node.js版本
+# 查看Node及npm版本
 ``` bash
 $ node -v
 $ npm -v
