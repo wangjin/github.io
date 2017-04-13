@@ -1,5 +1,5 @@
 ---
-title: OSX通过brew安装JDK
+title: OSX通过Homebrew安装JDK
 date: 2017-04-13 09:17:51
 tags: 
  - OSX
