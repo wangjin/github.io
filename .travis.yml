@@ -19,6 +19,3 @@ script:
  - hexo clean
  - hexo g
  - hexo d
-
-#after_success:
-
