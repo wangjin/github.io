@@ -18,7 +18,7 @@ tags:
 $ openssl genrsa -out ca.key 2048
 ```
 ### CA证书
-生成过程中需要输入一些CA机构信息
+生成过程中需要输入CA机构信息
 
 ``` bash
 $ openssl req -x509 -new -key ca.key -out ca.crt
@@ -33,7 +33,7 @@ $ openssl genrsa -out server.key 2048
 ```
 
 ### 生成服务端证书请求文件
-生成过程中需要输入一些服务端信息
+生成过程中需要输入服务端信息
 
 ``` bash
 $ openssl req -new -key server.key -out server.csr
