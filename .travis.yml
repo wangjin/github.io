@@ -12,6 +12,8 @@ before_script:
  - git clone --branch master https://github.com/wangjin252/github.io master
  - cd master
  - npm install
+ - git config --global user.email "wangjin-252@hotmail.com"
+ - git config --global user.name "WangJin"
 
 script:
  - hexo clean
