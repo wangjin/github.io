@@ -16,6 +16,4 @@ before_script:
 script:
  - hexo clean
  - hexo g
-
-after_script:
  - hexo d
