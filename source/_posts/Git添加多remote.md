@@ -29,3 +29,5 @@ $ git remote set-url --add [remote名称] <git_url>
 ``` bash
 $ git remote set-url --delete [remote名称] <git_url>
 ```
+
+配置保存在<code>.git/config</code>文件中
