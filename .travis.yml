@@ -6,7 +6,7 @@ node_js:
 deploy:
   provider: pages
   skip_cleanup: true
-  github_token: ba90ed4e81a7eb2ee04bf470cdd049e65ba58766 # Set in travis-ci.org dashboard
+  github_token: ee954b8e8cad3d2605a8f817638e28c08e9a092b # Set in travis-ci.org dashboard
   on:
     branch: master
 
