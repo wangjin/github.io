@@ -6,25 +6,25 @@ tags:
  - remote
 ---
 
-# Git添加remote
+# 添加remote
 
 ``` bash
 $ git remote add [remote名称] <git_url>
 ```
 
-# Git删除remote
+# 删除remote
 
 ``` bash
 $ git remote remove [remote名称] <git_url>
 ```
 
-# Git添加多个同名remote
+# 添加多个同名remote
 
 ``` bash
 $ git remote set-url --add [remote名称] <git_url>
 ```
 
-# Git删除同名remote
+# 删除同名remote
 
 ``` bash
 $ git remote set-url --delete [remote名称] <git_url>
