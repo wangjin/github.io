@@ -69,8 +69,8 @@ theme: next
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: https://github.com/wangjin252/wangjin252.github.io.git
-#  repo: git@github.com:wangjin252/wangjin252.github.io.git
+#  repo: https://github.com/wangjin252/wangjin252.github.io.git
+  repo: git@github.com:wangjin252/wangjin252.github.io.git
   branch: master
 
 

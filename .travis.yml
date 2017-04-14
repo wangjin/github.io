@@ -10,12 +10,17 @@ cache:
 before_script:
  - npm install -g hexo-cli
  - git clone --branch master https://github.com/wangjin252/github.io master
- - git config --global user.email "wangjin-252@hotmail.com"
- - git config --global user.name "WangJin"
  - cd master
  - npm install
 
 script:
  - hexo clean
  - hexo g
- - hexo d
+
+after_success:
+ - cd public
+ - git config --global user.email "wangjin-252@hotmail.com"
+ - git config --global user.name "WangJin"
+ - git add --all .
+ - git commit -m "Travis CI Auto Build"
+ - git push https://github.com/wangjin252/wangjin252.github.io.git master
