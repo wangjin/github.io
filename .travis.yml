@@ -3,12 +3,12 @@ language: node_js
 node_js:
  - "7"
 
-#deploy:
-#  provider: pages
-#  skip_cleanup: true
-#  github_token: ba90ed4e81a7eb2ee04bf470cdd049e65ba58766 # Set in travis-ci.org dashboard
-#  on:
-#    branch: master
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: ba90ed4e81a7eb2ee04bf470cdd049e65ba58766 # Set in travis-ci.org dashboard
+  on:
+    branch: master
 
 cache:
  directories:
