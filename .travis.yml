@@ -25,6 +25,7 @@ before_script:
 script:
  - hexo clean
  - hexo g
-
-after_success:
  - hexo d
+
+#after_success:
+
