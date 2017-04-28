@@ -208,7 +208,7 @@ JavaScript在设计时，有两种比较运算符：
 
 `NaN`这个特殊的Number与所有其他值都不相等，包括它自己：
 ```javascript
-Nan === NaN; // false
+NaN === NaN; // false
 ```
 
 ### null和undefined
