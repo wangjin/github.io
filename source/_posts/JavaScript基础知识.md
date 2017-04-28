@@ -1,90 +1,103 @@
 ---
 title: JavaScript基础知识
-date: 2017-04-18 20:46:23
+date: 2017-04-28 20:46:23
 tags:
  - JavaScript
 ---
 
-# 一、如何插入JS
-JS代码通常写在<code>`<script></script>`</code>标签中
-![](/images/JS标签.jpg)
-或者在src中指定外部JS文件路径<code>`<script src="script.js"></script>`</code>来引用外部JS文件
-![](/images/外部JS文件.jpg)
-
-# 二、JS在页面中的位置
-* 放在`<head>`部分
-在页面中head部分放置`<script>`元素，浏览器解析head部分就会执行这个代码，然后才解析页面的其余部分
-* 放在`<body>`部分
-在页面中body部分放置`<script>`元素，浏览器解析到该语句市就会执行这个代码
-![](/images/JS位置.jpg)
-
-# 三、变量
-## 1. 定义变量使用关键字var
-```
-var 变量名
+# 快速入门
+JavaScript代码可以直接嵌在网页的任何地方，不过通常我们都把JavaScript代码放到`<head>`中：
+```html
+<html>
+<head>
+   <script>
+     alert('Hello, world'); // 页面弹出Hello，world提示框
+   </script>
+</head>
+<body>
+   ...
+</body>
+</html>
 ```
 
-## 2. 变量要先声明再赋值
+由`<script>...</script>`包含的代码就是JavaScript代码，它将直接被浏览器执行。
+
+第二种方法是把JavaScript代码放到一个单独的.js文件，然后在HTML中通过`<script src="..."></script>`引入这个文件：
+```html
+<html>
+<head>
+  <script src="abc.js"></script>
+</head>
+<body>
+  ...
+</body>
+</html>
 ```
-var mychar;
-mychar = 'javascript';
-var mynum = 6;
+页面加载时，`abc.js`会被浏览器执行。
+
+把JavaScript代码放入一个单独的.js文件中更利于维护代码，并且多个页面可以各自引用同一份.js文件。
+
+可以在同一个页面中引入多个.js文件，还可以在页面中多次编写`<script> js代码... </script>`，浏览器按照顺序依次执行。
+
+`<script>`标签有一个`type`属性，该属性默认值为`text/javascript`，编写代码为JavaScript时可以缺省。
+
+# 基本语法
+
+## 语法
+JavaScript的语法和Java语言类似，每个语句以`;`结束，语句块用`{...}`。但是，JavaScript并不强制要求在每个语句的结尾加`;`，浏览器中负责执行JavaScript代码的引擎会自动在每个语句的结尾补上`;`。
+
+下面的一行代码就是一个完整的赋值语句：
+```javascript
+var x = 1;
 ```
 
-## 3. 变量可以重复赋值
-```
-var mychar;
-mychar='javascript';
-mychar='hello';
+下面的一行代码包含两个语句，每个语句用;表示语句结束：
+```javascript
+var x = 1; var y = 1; // 不建议一行写多个语句
 ```
 
-* 在JS中区分大小写，如变量mychar与myChar是不一样的，表示是两个变量
-* 变量虽然也可以不声明，直接使用，但不规范，需要先声明后使用
-
-# 四、函数
-
-## 1. 定义函数
+语句块是一组语句的集合，例如，下面的代码先做了一个判断，如果判断成立，将执行`{...}`中的所有语句：
+```javascript
+if (2 > 1) {
+    x = 1;
+    y = 2;
+    z = 3;
+}
 ```
-function 函数名()
-{
-     函数代码;
+注意花括号`{...}`内的语句具有缩进，通常是4个空格。缩进不是JavaScript语法要求必须的，但缩进有助于我们理解代码的层次，所以编写代码时要遵守缩进规则。很多文本编辑器具有“自动缩进”的功能，可以帮助整理代码。
+
+`{...}`还可以嵌套，形成层级结构：
+```javascript
+if (2 > 1) {
+    x = 1;
+    y = 2;
+    z = 3;
+    if (x < y) {
+        z = 4;
+    }
+    if (x > y) {
+        z = 5;
+    }
 }
 ```
 
-* function定义函数的关键字
-* "函数名"你为函数取的名字
-* "函数代码"替换为完成特定功能的代码
+## 注释
 
-# 五、输出内容（document.write）
-`document.write()`可用于直接向`HTML`输出流写内容
-
-## 1. 输出内容用""括起，直接输出""号内的内容。
-``` 
-<script type="text/javascript">
-  document.write("I love JavaScript！"); //内容用""括起来，""里的内容直接输出。
-</script>
-```
-## 2. 通过变量，输出内容
-```
-<script type="text/javascript">
-  var mystr="hello world!";
-  document.write(mystr);  //直接写变量名，输出变量存储的内容。
-</script>
+以`//`开头直到行末的字符被视为行注释，注释是给开发人员看到，JavaScript引擎会自动忽略：
+```javascript
+// 这是一行注释
+alert('hello'); // 这也是注释
 ```
 
-## 3. 输出多项内容，内容之间用+号连接。
-```
-<script type="text/javascript">
-  var mystr="hello";
-  document.write(mystr+"I love JavaScript"); //多项内容之间用+号连接
-</script>
+另一种块注释是用`/*...*/`把多行字符包裹起来，把一大“块”视为一个注释：
+```javascript
+/* 从这里开始是块注释
+仍然是注释
+仍然是注释
+注释结束 */
+alert('hello');
 ```
 
-## 4. 输出HTML标签，并起作用，标签使用""括起来。
-```
-<script type="text/javascript">
-  var mystr="hello";
-  document.write(mystr+"<br>");//输出hello后，输出一个换行符
-  document.write("JavaScript");
-</script>
-```
+## 大小写
+
+JavaScript严格区分大小写，如果弄错了大小写，程序将报错或者运行不正常。
