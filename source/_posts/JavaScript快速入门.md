@@ -1,5 +1,5 @@
 ---
-title: JavaScript基础知识
+title: JavaScript快速入门
 date: 2017-04-28 20:46:23
 tags:
  - JavaScript
@@ -358,7 +358,7 @@ arr.join('-'); // 当数组中包含：null, undefined, NaN, Infinity等元素�
 
 ### 对象
 
-JavaScript的对象是一组由键-值组成的无序集合，例如：
+JavaScript的对象是一种无序的集合数据类型，用`{...}`表示一个对象，以`xxx: xxx`键值对形式声明，用`,`隔开，例如：
 ```javascript
 var student  = {
     name : 'Jimmy',
@@ -366,10 +366,78 @@ var student  = {
     sex : '男'
 };
 ```
-JavaScript对象的键都是字符串类型，值可以是任意数据类型。上述`student`对象一共定义了3个键值对，其中每个键又称为对象的属性，例如，`student`的`name`属性为`Jimmy`，`sex`属性为`男`，要获取一个对象的属性，我们用对象*`变量.属性名`*的方式：：
+JavaScript对象的键都是字符串类型，值可以是任意数据类型。上述`student`对象一共定义了3个键值对，其中每个键又称为对象的属性，例如，`student`的`name`属性为`Jimmy`，`sex`属性为`男`，要获取一个对象的属性，我们用对象`变量.属性名`的方式：
 ```javascript
 student.name; // Jimmy
 student.sex; // 男
+```
+通过`变量.属性名`的方式来访问属性要求属性名必须是一个有效的变量名，如果属性名包含特殊字符，就必须用`''`括起来：
+```javascript
+var student = {
+    name : 'Jimmy',
+    age : 20,
+    'middle-school' : '第一中学'    
+};
+```
+`student`的属性`middle-school`包含特殊字符，不是一个有效的变量名，所以需要用`''`括起来，访问这个属性也无法通过`变量.属性名`的方式，必须用`['属性名']`的方式：
+```javascript
+student.name; // Jimmy
+student['name']; // Jimmy
+student['middle-school']; // 第一中学
+```
+
+如果访问一个不存在的属性名，返回`undefined`：
+```javascript
+var student = {
+    name : 'Jimmy'
+};
+
+student.name; // Jimmy
+student.age; // undefined
+```
+
+JavaScript的对象是动态类型，可以自由得给对象添加和删除属性：
+```javascript
+var student = {
+    name : 'Jimmy'
+};
+
+student.name; // Jimmy
+student.age; // undefined
+student.age = 18; //新增一个属性age
+student.age; // 18
+delete student.age; //删除age属性
+student.age; // undefined
+delete xiaoming.school; // 删除一个不存在的属性
+```
+
+使用`in`来检查JavaScript对象是否包含某属性：
+```javascript
+var student  = {
+    name : 'Jimmy',
+    age : 20,
+    sex : '男'
+};
+
+'name' in student; // true
+'school' in student; // false
+```
+如果`in`判断一个属性存在，但这个属性不一定是`student`的，它可能是`student`继承得到的：
+```javascript
+'toString' in student; // true
+```
+因为`toString`定义在`object`对象中，而所有对象最终都会在原型链上指向`object`，所以`student`也拥有`toString`属性。
+
+要判断一个属性是否是`student`自身拥有的，而不是继承得到的，可以用`hasOwnProperty()`函数：
+```javascript
+var student  = {
+    name : 'Jimmy',
+    age : 20,
+    sex : '男'
+};
+
+student.hasOwnProperty('name'); // true
+student.hasOwnProperty('toString'); // false
 ```
 
 ## 变量
