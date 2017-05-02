@@ -1,5 +1,5 @@
 ---
-title: JavaScript快速入门
+title: JavaScript学习笔记
 date: 2017-04-28 20:46:23
 tags:
  - JavaScript
