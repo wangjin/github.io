@@ -232,7 +232,7 @@ new arr(1, 2, 3.45, 'Hello', null, true); // 创建数组[1, 2, 3.45, 'Hello', n
 
 数组的元素可以通过索引来访问，索引的起始值为0：
 ```javascript
-var arr  = [1, 2, 3.45, 'Hello', null, true];
+var arr = [1, 2, 3.45, 'Hello', null, true];
 arr[0]; // 1
 arr[2]; // 3.45
 arr[3]; // Hello
@@ -243,13 +243,13 @@ arr[6]; // 索引超出了范围，返回undefined
 #### `length`属性
 数组的`length`属性返回数组的长度：
 ```javascript
-var arr  = [1, 2, 3.45, 'Hello', null, true];
+var arr = [1, 2, 3.45, 'Hello', null, true];
 arr.length; // 6
 ```
 
 给数组的`length`属性赋值会改变数组的长度：
 ```javascript
-var arr  = [1, 2, 3.45, 'Hello', null, true];
+var arr = [1, 2, 3.45, 'Hello', null, true];
 arr.length; // 6
 arr.length = 8; // [1, 2, 3.45, 'Hello', null, true, undefined, undefined]
 arr.length = 4; // [1, 2, 3.45, 'Hello']
@@ -257,25 +257,103 @@ arr.length = 4; // [1, 2, 3.45, 'Hello']
 
 数组可以通过索引值修改元素的值：
 ```javascript
-var arr  = [1, 2, 3.45, 'Hello', null, true];
+var arr = [1, 2, 3.45, 'Hello', null, true];
 arr[0] = 'A'; // 数组变为['A', 2, 3.45, 'Hello', null, true]
 ```
 
 如果索引值超过了原数组长度，修改数组元素会改变数组的长度：
 ```javascript
-var arr  = [1, 2, 3.45, 'Hello', null, true];
+var arr = [1, 2, 3.45, 'Hello', null, true];
 arr[6] = 'A'; // 数组变为[1, 2, 3.45, 'Hello', null, true, 'A']
 ```
 
 #### `indexOf()`
 数组可以通过`indexOf()`来搜索一个指定的元素的位置：
 ```javascript
-var arr  = [1, '2', 3.45, 'Hello', null, true];
+var arr = [1, '2', 3.45, 'Hello', null, true];
 arr.indexOf(1); // 1的索引位置为0
 arr.indexOf('2'); // '2'的索引位置为1
 arr.indexOf(2); // 2不是数组元素，索引为-1
 arr.indexOf('Hello'); // 'Hello'的索引位置为3
 arr.indexOf(true); // true的索引位置为5
+```
+
+#### `slice()`
+`slice()`类似String的`substring()`，截取数组的部分元素，返回一个新的数组：
+```javascript
+var arr = [1, '2', 3.45, 'Hello', null, true];
+arr.slice(0,3); // 从索引0开始，到索引3，不包括索引3：[1, '2', 3.45]
+arr.slice(3); // 从索引3开始到结束：['Hello', null, true]
+```
+`slice()`的起止参数包括开始索引，不包括结束索引。
+
+如果不给`slice()`传任何参数，表示截取所有元素，可以利用这一点来复制并创建一个新的数组：
+```javascript
+var arr = [1, '2', 3.45, 'Hello', null, true];
+var arrCopy = arr.slice(); // [1, '2', 3.45, 'Hello', null, true]
+arr === arrCopy; // false
+```
+
+#### `push()和pop()`
+`push()`向数组的末尾添加若干新元素，`pop()`则将数组的末尾最后一个元素删掉：
+```javascript
+var arr = [1, '2', 3.45, 'Hello', null, true];
+arr.push('6'); // [1, '2', 3.45, 'Hello', null, true, '6'];
+arr.push(7,'A'); // [1, '2', 3.45, 'Hello', null, true, '6', 7,'A'];
+arr.pop(); // pop返回 'A'，原数组变为[1, '2', 3.45, 'Hello', null, true, '6', 7];
+arr.pop(); arr.pop(); arr.pop();arr.pop(); arr.pop(); arr.pop();arr.pop(); arr.pop(); // 连续pop8次，原数组变为[]
+arr.pop(); // 空数组pop不会报错，返回undefined，原数组变为[]
+```
+
+#### `unshift()和shift()`
+`unshift()`向数组的头部添加若干新元素，`shift()`则将数组的头部第一个元素删掉：
+```javascript
+var arr = [1, '2', 3.45, 'Hello', null, true];
+arr.unshift('6'); // ['6'，1, '2', 3.45, 'Hello', null, true];
+arr.unshift(7,'A'); // [7, 'A'，'6'，1, '2', 3.45, 'Hello', null, true];
+arr.shift(); // pop返回 7，原数组变为['A'，'6'，1, '2', 3.45, 'Hello', null, true];
+arr.shift(); arr.shift(); arr.shift();arr.shift(); arr.shift(); arr.shift();arr.shift(); arr.shift(); // 连续shift8次，原数组变为[]
+arr.shift(); // 空数组shift不会报错，返回undefined，原数组变为[]
+```
+
+#### `sort()`
+`sort()`对数组进行排序，默认按照自然顺序排序：
+```javascript
+var arr = [6, 4, 1, 3];
+arr.sort(); // [1, 3, 4, 6]
+```
+
+#### `splice()`
+`splice()`从指定的索引开始删除若干元素，然后再从该位置添加若干元素：
+```javascript
+var arr = [1, '2', 3.45, 'Hello', null, true];
+arr.splice(2, 3, 'A', 'B'); // 从索引2开始删除3个元素，然后添加两个元素，返回：[3.45, 'Hello', null]，原数组变为：[1, '2', A，B, true]
+arr.splice(2, 2); // 从索引2开始删除两个元素，不添加任何元素，返回：[A, B]，原数组变为：[1, '2', true]
+arr.splice(2, 0, 'A', 'B'); // 从索引2开始不删除元素，然后添加两个元素，返回 []，元素组变为：[1, '2', A，B, true]
+```
+
+#### `reverse()`
+`reverse()`对数组进行元素反转：
+```javascript
+var arr = [4, 3, 2, 1];
+arr.reverse(); // [1, 2, 3, 4]
+```
+
+#### `concat()`
+`concat()`将当前数组与另一个数组或若干元素拼接起来，返回新的数组，但是并不修改当前数组：
+```javascript
+var arr = [1, '2', 3.45, 'Hello', null, true];
+arr.concat([1, 2, 3]); // [1, '2', 3.45, 'Hello', null, true, 1, 2, 3]
+arr.concat(4, 5, ['A', 'B']) // [1, '2', 3.45, 'Hello', null, true, 1, 2, 3，4，5，'A'，'B']
+```
+
+#### `join()`
+`join()`将数组的元素用指定的字符拼接起来：
+```javascript
+var arr = [1, '2', 3.45];
+arr.join('-'); // '1-2-3.45'
+arr = [1, '2', 3.45, 'Hello', null, undefined, NaN, Infinity, true];
+arr.join('-'); // 当数组中包含：null, undefined, NaN, Infinity等元素时，null与undefined拼接时留空：'1-2-3.45-Hello---NaN-Infinity-true'
 ```
 
 ### 对象
