@@ -689,3 +689,98 @@ const PI = 3.14;
 PI = 3; // 某些浏览器不报错，但是无效果！
 PI; // 3.14
 ```
+
+## 方法
+
+在对象中绑定函数，就称为这个对象的方法：
+```javascript
+var student = {
+    name : 'Jimmy',
+    birthday : 1988,
+    age : function(){
+        return new Date().getFullYear() - birthday;
+    }
+};
+
+student.age(); // 调用age()方法得到结果：29
+```
+绑定到对象上的函数称为方法，和普通函数也没啥区别，但是它在内部有一个`this`关键字，`this`是一个特殊变量，它始终指向当前对象，也就是`student`这个变量。所以，`this.birthday`可以拿到`student`的`birthday`属性。
+
+如果在单独的函数中使用`this`：
+```javascript
+function getAge(){
+    return new Date().getFullYear() - this.birthday;
+}
+
+var student = {
+    name : 'Jimmy',
+    birthday : 1988,
+    age : getAge
+};
+
+student.age(); // 调用age()方法得到结果：29
+getAge(); // 单独调用：NaN
+
+var fn = student.age;
+fn(); // NaN
+```
+如果以对象的方法形式调用，比如`student.age()`，该函数的`this`指向被调用的对象，也就是`student`。
+如果单独调用函数，比如`getAge()`，此时，该函数的`this`指向全局对象，也就是`window`。
+如果将`student.age`赋值给`fn`，此时，该函数的`this`也指向全局对象。
+
+在`strict`模式下，上述情况的`this`指向`undefined`，而不是全局对象`window`，执行时会抛出`TypeError: Cannot read property 'birthday' of undefined`异常。
+
+在函数内部声明函数时也会遇到`this`指向不正确的情况：
+```javascript
+var student = {
+    name : 'Jimmy',
+    birthday : 1988,
+    age : function(){
+        function getAge() {
+            return new Date().getFullYear() - this.birthday;
+        }
+        
+        return getAge();
+    }
+};
+
+student.age(); // strict模式下this指向全局对象window，函数执行返回：NaN，strict模式下this指向undefined，函数执行抛出TypeError: Cannot read property 'birthday' of undefined异常
+```
+可以通过声明一个变变量来捕获`this`：
+```javascript
+var student = {
+    name : 'Jimmy',
+    birthday : 1988,
+    age : function(){
+        var that = this;
+        function getAge() {
+            return new Date().getFullYear() - that.birthday;
+        }
+        
+        return getAge();
+    }
+};
+
+student.age(); // 28
+```
+用`var that = this;`来解决`this`指向问题，就可以放心在函数内部声明其他函数，而不是将所有的语句写在一个函数中。
+
+### apply
+
+在一个独立的函数调用中，根据是否是`strict`模式，`this`指向`undefined`或`window`，不过，我们可以用过`apply`控制`this`的指向。
+函数的`apply`方法接收两个参数，第一个参数是需要绑定的`this`变量，第二个是参数数组，表示函数本身的参数：
+```javascript
+function getAge(){
+    return new Date().getFullYear() - this.birthday;
+}
+
+var student = {
+    name : 'Jimmy',
+    birthday : 1988,
+    age : getAge
+};
+
+student.age(); // 28
+getAge().apply(student,[]); // 28，this指向student，参数数组为空
+
+```
