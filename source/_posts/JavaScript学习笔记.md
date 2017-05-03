@@ -746,7 +746,7 @@ var student = {
 
 student.age(); // strict模式下this指向全局对象window，函数执行返回：NaN，strict模式下this指向undefined，函数执行抛出TypeError: Cannot read property 'birthday' of undefined异常
 ```
-可以通过声明一个变变量来捕获`this`：
+可以通过声明一个变量来捕获`this`：
 ```javascript
 var student = {
     name : 'Jimmy',
