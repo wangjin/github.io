@@ -704,7 +704,7 @@ var student = {
 
 student.age(); // 调用age()方法得到结果：29
 ```
-绑定到对象上的函数称为方法，和普通函数也没啥区别，但是它在内部有一个`this`关键字，`this`是一个特殊变量，它始终指向当前对象，也就是`student`这个变量。所以，`this.birthday`可以拿到`student`的`birthday`属性。
+绑定到对象上的函数称为方法，和普通函数没有区别，但是它在内部有一个`this`关键字，`this`是一个特殊变量，它始终指向当前对象，也就是`student`这个变量。所以，`this.birthday`可以拿到`student`的`birthday`属性。
 
 如果在单独的函数中使用`this`：
 ```javascript
@@ -781,6 +781,5 @@ var student = {
 };
 
 student.age(); // 28
-getAge().apply(student,[]); // 28，this指向student，参数数组为空
-
+getAge.apply(student,[]); // 28，this指向student，参数数组为空
 ```
