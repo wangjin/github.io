@@ -783,3 +783,28 @@ var student = {
 student.age(); // 28
 getAge.apply(student,[]); // 28，this指向student，参数数组为空
 ```
+
+## 高阶函数
+一个函数就接收另一个函数作为参数，这种函数就称之为高阶函数。
+
+一个最简单的高阶函数：
+```javascript
+function add(x, y, f) {
+    return f(x) + f(y);
+}
+```
+
+当我们调用`add(-1, 2, Math.abs)`时，参数`x`，`y`和`f`分别接收`-1`，`2`和函数`Math.abs`，根据函数定义，我们可以推导计算过程为：
+```javascript
+x = -1;
+y = 2;
+f = Math.abs;
+f(x) + f(y) => Math.abs(-1) + Math.abs(2) => 3;
+return 3;
+```
+用代码验证一下：
+```javascript
+add(-1, 2, Math.abs); // 3
+```
+
+高阶函数除了可以接受函数作为参数外，还可以把函数作为结果值返回。
