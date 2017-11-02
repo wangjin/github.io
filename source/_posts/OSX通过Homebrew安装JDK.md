@@ -32,10 +32,10 @@ $ brew cask reinstall java
 
 # 如果你需要安装指定版本，可以使用`homebrew-cask-versions`
 ```bash
-$ brew cask reinstall java
-```
 brew tap caskroom/versions
 brew cask install java8
+```
+
 # 测试JDK是否正确安装
 ```bash
 $ java -version
