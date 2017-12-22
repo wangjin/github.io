@@ -8,5 +8,5 @@ tags:
 # `th:onclick`
 
 ```html
-th:onlick="|test('${aaa}')|"
+th:onlick="|test('${param}')|"
 ```
