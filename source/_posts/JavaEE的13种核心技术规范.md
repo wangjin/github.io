@@ -9,6 +9,8 @@ tags:
 # JDBC（Java Database）数据库连接
 JDBC是一组用于执行SQL的Java API ，为访问不同的数据库提供了一种统一的途径，几乎所有的关系型数据库厂商（DBMS）都提供了JDBC的服务或驱动。JDBC对数据库的访问也具有平台无关性。
 
+<!-- more -->
+
 ![JDBC处理模型](http://upload-images.jianshu.io/upload_images/1714316-9261f692fea3c64a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 
