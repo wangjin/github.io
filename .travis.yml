@@ -18,12 +18,7 @@ before_script:
 script:
  - hexo clean
  - hexo g
-# - hexo d
 
-deploy:
-  provider: pages
-  skip-cleanup: true
-  github-token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
-  keep-history: true
-  on:
-    branch: master
+after_script:
+ - sed -i "s/GITHUB_TOKEN/${GITHUB_TOKEN}/g" ./_config.yml
+ - hexo d
