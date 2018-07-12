@@ -76,7 +76,7 @@ deploy:
 
 algolia:
   applicationID: '6R0Z9QTPH0'
-  apiKey: '72fe1f1274cae006e3a70cc9d94afd13'
-  adminApiKey: '7b3bc2331e8bde8fb9182ddb4ba14380'
+  apiKey: ALGOLIA_APIKEY
+  adminApiKey: ALGOLIA_ADMINAPIKEY
   indexName: 'blog'
   chunkSize: 5000
