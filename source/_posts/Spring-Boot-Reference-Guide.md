@@ -10,9 +10,21 @@ tags:
 
 <!-- more -->
 
-# Part I. Spring Boot Documentation
-## 1. About the Documentation
-## 2. Getting Help
+# Part I. Spring Boot 文档
+本节是对Spring Boot参考文档的简要概述。
+## 1. 关于文档
+Spring Boot参考指南有以下几种文档形式（官方）
+ - [HTML](https://docs.spring.io/spring-boot/docs/2.0.3.RELEASE/reference/html)
+ - [PDF](https://docs.spring.io/spring-boot/docs/2.0.3.RELEASE/reference/pdf/spring-boot-reference.pdf)
+ - [EPUB](https://docs.spring.io/spring-boot/docs/2.0.3.RELEASE/reference/epub/spring-boot-reference.epub)
+
+最新的文档可以在[docs.spring.io/spring-boot/docs/current/reference](https://docs.spring.io/spring-boot/docs/current/reference)查看
+## 2. 获取帮助
+如果您在使用Spring Boot时遇到问题，可以参考以下内容：
+ - 尝试使用[How-to documents](https://docs.spring.io/spring-boot/docs/2.0.3.RELEASE/reference/htmlsingle/#howto)，里面最提供常见的问题的解决方案。
+ - 学习Spring基础知识。Spring Boot建立在许多其他Spring项目之上。[spring.io](https://spring.io/)网站提供了大量参考文档以供查看。如果您刚开始使用Spring，可以先从[guides](https://spring.io/guides)看起。
+ - 在[stackoverflow.com](https://stackoverflow.com/)用`spring-boot`标签提交问题，我们会关注相关问题。
+ - 在Spring Boot [Issue](https://github.com/spring-projects/spring-boot/issues)提交问题
 ## 3. First Steps
 ## 4. Working with Spring Boot
 ## 5. Learning about Spring Boot Features
