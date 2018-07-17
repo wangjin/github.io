@@ -1,0 +1,609 @@
+---
+title: Spring Boot 参考指南（2.0.3.RELEASE）
+date: 2018-07-17 15:39:26
+tags: 
+ - Spring
+ - Spring Boot
+---
+
+> Spring Boot官方文档翻译
+
+<!-- more -->
+
+# Part I. Spring Boot Documentation
+## 1. About the Documentation
+## 2. Getting Help
+## 3. First Steps
+## 4. Working with Spring Boot
+## 5. Learning about Spring Boot Features
+## 6. Moving to Production
+## 7. Advanced Topics
+
+# Part II. Getting Started
+## 8. Introducing Spring Boot
+## 9. System Requirements
+### 9.1. Servlet Containers
+## 10. Installing Spring Boot
+### 10.1. Installation Instructions for the Java Developer
+#### 10.1.1. Maven Installation
+#### 10.1.2. Gradle Installation
+### 10.2. Installing the Spring Boot CLI
+#### 10.2.1. Manual Installation
+#### 10.2.2. Installation with SDKMAN!
+#### 10.2.3. OSX Homebrew Installation
+#### 10.2.4. MacPorts Installation
+#### 10.2.5. Command-line Completion
+#### 10.2.6. Windows Scoop Installation
+#### 10.2.7. Quick-start Spring CLI Example
+### 10.3. Upgrading from an Earlier Version of Spring Boot
+## 11. Developing Your First Spring Boot Application
+### 11.1. Creating the POM
+### 11.2. Adding Classpath Dependencies
+### 11.3. Writing the Code
+#### 11.3.1. The @RestController and @RequestMapping Annotations
+#### 11.3.2. The @EnableAutoConfiguration Annotation
+#### 11.3.3. The “main” Method
+### 11.4. Running the Example
+### 11.5. Creating an Executable Jar
+## 12. What to Read Next
+# Part III. Using Spring Boot
+## 13. Build Systems
+### 13.1. Dependency Management
+### 13.2. Maven
+#### 13.2.1. Inheriting the Starter Parent
+#### 13.2.2. Using Spring Boot without the Parent POM
+#### 13.2.3. Using the Spring Boot Maven Plugin
+#### 13.3. Gradle
+### 13.4. Ant
+### 13.5. Starters
+## 14. Structuring Your Code
+### 14.1. Using the “default” Package
+### 14.2. Locating the Main Application Class
+## 15. Configuration Classes
+### 15.1. Importing Additional Configuration Classes
+### 15.2. Importing XML Configuration
+## 16. Auto-configuration
+### 16.1. Gradually Replacing Auto-configuration
+### 16.2. Disabling Specific Auto-configuration Classes
+## 17. Spring Beans and Dependency Injection
+## 18. Using the @SpringBootApplication Annotation
+## 19. Running Your Application
+### 19.1. Running from an IDE
+### 19.2. Running as a Packaged Application
+### 19.3. Using the Maven Plugin
+### 19.4. Using the Gradle Plugin
+### 19.5. Hot Swapping
+## 20. Developer Tools
+### 20.1. Property Defaults
+### 20.2. Automatic Restart
+#### 20.2.1. Logging changes in condition evaluation
+#### 20.2.2. Excluding Resources
+#### 20.2.3. Watching Additional Paths
+#### 20.2.4. Disabling Restart
+#### 20.2.5. Using a Trigger File
+#### 20.2.6. Customizing the Restart Classloader
+#### 20.2.7. Known Limitations
+### 20.3. LiveReload
+### 20.4. Global Settings
+### 20.5. Remote Applications
+#### 20.5.1. Running the Remote Client Application
+#### 20.5.2. Remote Update
+## 21. Packaging Your Application for Production
+## 22. What to Read Next
+# Part IV. Spring Boot features
+## 23. SpringApplication
+### 23.1. Startup Failure
+### 23.2. Customizing the Banner
+### 23.3. Customizing SpringApplication
+### 23.4. Fluent Builder API
+### 23.5. Application Events and Listeners
+### 23.6. Web Environment
+### 23.7. Accessing Application Arguments
+### 23.8. Using the ApplicationRunner or CommandLineRunner
+### 23.9. Application Exit
+### 23.10. Admin Features
+## 24. Externalized Configuration
+### 24.1. Configuring Random Values
+### 24.2. Accessing Command Line Properties
+### 24.3. Application Property Files
+### 24.4. Profile-specific Properties
+### 24.5. Placeholders in Properties
+### 24.6. Using YAML Instead of Properties
+#### 24.6.1. Loading YAML
+#### 24.6.2. Exposing YAML as Properties in the Spring Environment
+#### 24.6.3. Multi-profile YAML Documents
+#### 24.6.4. YAML Shortcomings
+### 24.7. Type-safe Configuration Properties
+#### 24.7.1. Third-party Configuration
+#### 24.7.2. Relaxed Binding
+#### 24.7.3. Merging Complex Types
+#### 24.7.4. Properties Conversion Converting durations
+#### 24.7.5. @ConfigurationProperties Validation
+#### 24.7.6. @ConfigurationProperties vs. @Value
+## 25. Profiles
+### 25.1. Adding Active Profiles
+### 25.2. Programmatically Setting Profiles
+### 25.3. Profile-specific Configuration Files
+## 26. Logging
+### 26.1. Log Format
+### 26.2. Console Output
+#### 26.2.1. Color-coded Output
+### 26.3. File Output
+### 26.4. Log Levels
+### 26.5. Custom Log Configuration
+### 26.6. Logback Extensions
+#### 26.6.1. Profile-specific Configuration
+#### 26.6.2. Environment Properties
+## 27. Developing Web Applications
+### 27.1. The “Spring Web MVC Framework”
+#### 27.1.1. Spring MVC Auto-configuration
+#### 27.1.2. HttpMessageConverters
+#### 27.1.3. Custom JSON Serializers and Deserializers
+#### 27.1.4. MessageCodesResolver
+#### 27.1.5. Static Content
+#### 27.1.6. Welcome Page
+#### 27.1.7. Custom Favicon
+#### 27.1.8. Path Matching and Content Negotiation
+#### 27.1.9. ConfigurableWebBindingInitializer
+#### 27.1.10. Template Engines
+#### 27.1.11. Error Handling Custom Error Pages Mapping Error Pages outside of Spring MVC
+#### 27.1.12. Spring HATEOAS
+#### 27.1.13. CORS Support
+### 27.2. The “Spring WebFlux Framework”
+#### 27.2.1. Spring WebFlux Auto-configuration
+#### 27.2.2. HTTP Codecs with HttpMessageReaders and HttpMessageWriters
+#### 27.2.3. Static Content
+#### 27.2.4. Template Engines
+#### 27.2.5. Error Handling Custom Error Pages
+#### 27.2.6. Web Filters
+### 27.3. JAX-RS and Jersey
+### 27.4. Embedded Servlet Container Support
+#### 27.4.1. Servlets, Filters, and listeners Registering Servlets, Filters, and Listeners as Spring Beans
+#### 27.4.2. Servlet Context Initialization Scanning for Servlets, Filters, and listeners
+#### 27.4.3. The ServletWebServerApplicationContext
+#### 27.4.4. Customizing Embedded Servlet Containers Programmatic Customization Customizing ConfigurableServletWebServerFactory Directly
+#### 27.4.5. JSP Limitations
+## 28. Security
+### 28.1. MVC Security
+### 28.2. WebFlux Security
+### 28.3. OAuth2
+#### 28.3.1. Client
+#### 28.3.2. Server
+### 28.4. Actuator Security
+#### 28.4.1. Cross Site Request Forgery Protection
+## 29. Working with SQL Databases
+### 29.1. Configure a DataSource
+#### 29.1.1. Embedded Database Support
+#### 29.1.2. Connection to a Production Database
+#### 29.1.3. Connection to a JNDI DataSource
+### 29.2. Using JdbcTemplate
+### 29.3. JPA and “Spring Data”
+#### 29.3.1. Entity Classes
+#### 29.3.2. Spring Data JPA Repositories
+#### 29.3.3. Creating and Dropping JPA Databases
+#### 29.3.4. Open EntityManager in View
+### 29.4. Using H2’s Web Console
+#### 29.4.1. Changing the H2 Console’s Path
+### 29.5. Using jOOQ
+#### 29.5.1. Code Generation
+#### 29.5.2. Using DSLContext
+#### 29.5.3. jOOQ SQL Dialect
+#### 29.5.4. Customizing jOOQ
+## 30. Working with NoSQL Technologies
+### 30.1. Redis
+#### 30.1.1. Connecting to Redis
+### 30.2. MongoDB
+#### 30.2.1. Connecting to a MongoDB Database
+#### 30.2.2. MongoTemplate
+#### 30.2.3. Spring Data MongoDB Repositories
+#### 30.2.4. Embedded Mongo
+### 30.3. Neo4j
+#### 30.3.1. Connecting to a Neo4j Database
+#### 30.3.2. Using the Embedded Mode
+#### 30.3.3. Neo4jSession
+#### 30.3.4. Spring Data Neo4j Repositories
+#### 30.3.5. Repository Example
+### 30.4. Gemfire
+### 30.5. Solr
+#### 30.5.1. Connecting to Solr
+#### 30.5.2. Spring Data Solr Repositories
+### 30.6. Elasticsearch
+#### 30.6.1. Connecting to Elasticsearch by Using Jest
+#### 30.6.2. Connecting to Elasticsearch by Using Spring Data
+#### 30.6.3. Spring Data Elasticsearch Repositories
+### 30.7. Cassandra
+#### 30.7.1. Connecting to Cassandra
+#### 30.7.2. Spring Data Cassandra Repositories
+### 30.8. Couchbase
+#### 30.8.1. Connecting to Couchbase
+#### 30.8.2. Spring Data Couchbase Repositories
+### 30.9. LDAP
+#### 30.9.1. Connecting to an LDAP Server
+#### 30.9.2. Spring Data LDAP Repositories
+#### 30.9.3. Embedded In-memory LDAP Server
+### 30.10. InfluxDB
+#### 30.10.1. Connecting to InfluxDB
+## 31. Caching
+### 31.1. Supported Cache Providers
+#### 31.1.1. Generic
+#### 31.1.2. JCache (JSR-107)
+#### 31.1.3. EhCache 2.x
+#### 31.1.4. Hazelcast
+#### 31.1.5. Infinispan
+#### 31.1.6. Couchbase
+#### 31.1.7. Redis
+#### 31.1.8. Caffeine
+#### 31.1.9. Simple
+#### 31.1.10. None
+## 32. Messaging
+### 32.1. JMS
+#### 32.1.1. ActiveMQ Support
+#### 32.1.2. Artemis Support
+#### 32.1.3. Using a JNDI ConnectionFactory
+#### 32.1.4. Sending a Message
+#### 32.1.5. Receiving a Message
+### 32.2. AMQP
+#### 32.2.1. RabbitMQ support
+#### 32.2.2. Sending a Message
+#### 32.2.3. Receiving a Message
+### 32.3. Apache Kafka Support
+#### 32.3.1. Sending a Message
+#### 32.3.2. Receiving a Message
+#### 32.3.3. Additional Kafka Properties
+## 33. Calling REST Services with RestTemplate
+### 33.1. RestTemplate Customization
+## 34. Calling REST Services with WebClient
+### 34.1. WebClient Customization
+## 35. Validation
+## 36. Sending Email
+## 37. Distributed Transactions with JTA
+### 37.1. Using an Atomikos Transaction Manager
+### 37.2. Using a Bitronix Transaction Manager
+### 37.3. Using a Narayana Transaction Manager
+### 37.4. Using a Java EE Managed Transaction Manager
+### 37.5. Mixing XA and Non-XA JMS Connections
+### 37.6. Supporting an Alternative Embedded Transaction Manager
+## 38. Hazelcast
+## 39. Quartz Scheduler
+## 40. Spring Integration
+## 41. Spring Session
+## 42. Monitoring and Management over JMX
+## 43. Testing
+### 43.1. Test Scope Dependencies
+### 43.2. Testing Spring Applications
+### 43.3. Testing Spring Boot Applications
+#### 43.3.1. Detecting Web Application Type
+#### 43.3.2. Detecting Test Configuration
+#### 43.3.3. Excluding Test Configuration
+#### 43.3.4. Testing with a running server
+#### 43.3.5. Using JMX
+#### 43.3.6. Mocking and Spying Beans
+#### 43.3.7. Auto-configured Tests
+#### 43.3.8. Auto-configured JSON Tests
+#### 43.3.9. Auto-configured Spring MVC Tests
+#### 43.3.10. Auto-configured Spring WebFlux Tests
+#### 43.3.11. Auto-configured Data JPA Tests
+#### 43.3.12. Auto-configured JDBC Tests
+#### 43.3.13. Auto-configured jOOQ Tests
+#### 43.3.14. Auto-configured Data MongoDB Tests
+#### 43.3.15. Auto-configured Data Neo4j Tests
+#### 43.3.16. Auto-configured Data Redis Tests
+#### 43.3.17. Auto-configured Data LDAP Tests
+#### 43.3.18. Auto-configured REST Clients
+#### 43.3.19. Auto-configured Spring REST Docs Tests Auto-configured Spring REST Docs Tests with Mock MVC Auto-configured Spring REST Docs Tests with REST Assured
+#### 43.3.20. User Configuration and Slicing
+#### 43.3.21. Using Spock to Test Spring Boot Applications
+### 43.4. Test Utilities
+#### 43.4.1. ConfigFileApplicationContextInitializer
+#### 43.4.2. TestPropertyValues
+#### 43.4.3. OutputCapture
+#### 43.4.4. TestRestTemplate
+## 44. WebSockets
+## 45. Web Services
+## 46. Creating Your Own Auto-configuration
+### 46.1. Understanding Auto-configured Beans
+### 46.2. Locating Auto-configuration Candidates
+### 46.3. Condition Annotations
+#### 46.3.1. Class Conditions
+#### 46.3.2. Bean Conditions
+#### 46.3.3. Property Conditions
+#### 46.3.4. Resource Conditions
+#### 46.3.5. Web Application Conditions
+#### 46.3.6. SpEL Expression Conditions
+### 46.4. Testing your Auto-configuration
+#### 46.4.1. Simulating a Web Context
+#### 46.4.2. Overriding the Classpath
+### 46.5. Creating Your Own Starter
+#### 46.5.1. Naming
+#### 46.5.2. autoconfigure Module
+#### 46.5.3. Starter Module
+## 47. Kotlin support
+### 47.1. Requirements
+### 47.2. Null-safety
+### 47.3. Kotlin API
+#### 47.3.1. runApplication
+#### 47.3.2. Extensions
+### 47.4. Dependency management
+### 47.5. @ConfigurationProperties
+### 47.6. Testing
+### 47.7. Resources
+#### 47.7.1. Further reading
+#### 47.7.2. Examples
+## 48. What to Read Next
+# Part V. Spring Boot Actuator: Production-ready features
+## 49. Enabling Production-ready Features
+## 50. Endpoints
+### 50.1. Enabling Endpoints
+### 50.2. Exposing Endpoints
+### 50.3. Securing HTTP Endpoints
+### 50.4. Configuring Endpoints
+### 50.5. Hypermedia for Actuator Web Endpoints
+### 50.6. Actuator Web Endpoint Paths
+### 50.7. CORS Support
+### 50.8. Implementing Custom Endpoints
+#### 50.8.1. Receiving Input Input type conversion
+#### 50.8.2. Custom Web Endpoints Web Endpoint Request Predicates Path HTTP method Consumes Produces Web Endpoint Response Status Web Endpoint Range Requests Web Endpoint Security
+#### 50.8.3. Servlet endpoints
+#### 50.8.4. Controller endpoints
+### 50.9. Health Information
+#### 50.9.1. Auto-configured HealthIndicators
+#### 50.9.2. Writing Custom HealthIndicators
+#### 50.9.3. Reactive Health Indicators
+#### 50.9.4. Auto-configured ReactiveHealthIndicators
+### 50.10. Application Information
+#### 50.10.1. Auto-configured InfoContributors
+#### 50.10.2. Custom Application Information
+#### 50.10.3. Git Commit Information
+#### 50.10.4. Build Information
+#### 50.10.5. Writing Custom InfoContributors
+## 51. Monitoring and Management over HTTP
+### 51.1. Customizing the Management Endpoint Paths
+### 51.2. Customizing the Management Server Port
+### 51.3. Configuring Management-specific SSL
+### 51.4. Customizing the Management Server Address
+### 51.5. Disabling HTTP Endpoints
+## 52. Monitoring and Management over JMX
+### 52.1. Customizing MBean Names
+### 52.2. Disabling JMX Endpoints
+### 52.3. Using Jolokia for JMX over HTTP
+#### 52.3.1. Customizing Jolokia
+#### 52.3.2. Disabling Jolokia
+## 53. Loggers
+### 53.1. Configure a Logger
+## 54. Metrics
+### 54.1. Getting started
+### 54.2. Supported monitoring systems
+#### 54.2.1. Atlas
+#### 54.2.2. Datadog
+#### 54.2.3. Ganglia
+#### 54.2.4. Graphite
+#### 54.2.5. Influx
+#### 54.2.6. JMX
+#### 54.2.7. New Relic
+#### 54.2.8. Prometheus
+#### 54.2.9. SignalFx
+#### 54.2.10. Simple
+#### 54.2.11. StatsD
+#### 54.2.12. Wavefront
+### 54.3. Supported Metrics
+#### 54.3.1. Spring MVC Metrics
+#### 54.3.2. Spring WebFlux Metrics
+#### 54.3.3. RestTemplate Metrics
+#### 54.3.4. Cache Metrics
+#### 54.3.5. DataSource Metrics
+#### 54.3.6. RabbitMQ Metrics
+### 54.4. Registering custom metrics
+### 54.5. Customizing individual metrics
+#### 54.5.1. Per-meter properties
+### 54.6. Metrics endpoint
+## 55. Auditing
+## 56. HTTP Tracing
+### 56.1. Custom HTTP tracing
+## 57. Process Monitoring
+## 57.1. Extending Configuration
+## 57.2. Programmatically
+## 58. Cloud Foundry Support
+### 58.1. Disabling Extended Cloud Foundry Actuator Support
+### 58.2. Cloud Foundry Self-signed Certificates
+### 58.3. Custom context path
+## 59. What to Read Next
+# Part VI. Deploying Spring Boot Applications
+## 60. Deploying to the Cloud
+### 60.1. Cloud Foundry
+#### 60.1.1. Binding to Services
+### 60.2. Heroku
+### 60.3. OpenShift
+### 60.4. Amazon Web Services (AWS)
+#### 60.4.1. AWS Elastic Beanstalk Using the Tomcat Platform Using the Java SE Platform
+#### 60.4.2. Summary
+### 60.5. Boxfuse and Amazon Web Services
+### 60.6. Google Cloud
+## 61. Installing Spring Boot Applications
+### 61.1. Supported Operating Systems
+### 61.2. Unix/Linux Services
+#### 61.2.1. Installation as an init.d Service (System V) Securing an init.d Service
+#### 61.2.2. Installation as a systemd Service
+#### 61.2.3. Customizing the Startup Script Customizing the Start Script when It Is Written Customizing a Script When It Runs
+### 61.3. Microsoft Windows Services
+## 62. What to Read Next
+# Part VII. Spring Boot CLI
+## 63. Installing the CLI
+## 64. Using the CLI
+### 64.1. Running Applications with the CLI
+#### 64.1.1. Deduced “grab” Dependencies
+#### 64.1.2. Deduced “grab” Coordinates
+#### 64.1.3. Default Import Statements
+#### 64.1.4. Automatic Main Method
+#### 64.1.5. Custom Dependency Management
+### 64.2. Applications with Multiple Source Files
+### 64.3. Packaging Your Application
+### 64.4. Initialize a New Project
+### 64.5. Using the Embedded Shell
+### 64.6. Adding Extensions to the CLI
+## 65. Developing Applications with the Groovy Beans DSL
+## 66. Configuring the CLI with settings.xml
+## 67. What to Read Next
+# Part VIII. Build tool plugins
+## 68. Spring Boot Maven Plugin
+### 68.1. Including the Plugin
+### 68.2. Packaging Executable Jar and War Files
+## 69. Spring Boot Gradle Plugin
+## 70. Spring Boot AntLib Module
+### 70.1. Spring Boot Ant Tasks
+#### 70.1.1. spring-boot:exejar
+#### 70.1.2. Examples
+### 70.2. spring-boot:findmainclass
+#### 70.2.1. Examples
+## 71. Supporting Other Build Systems
+### 71.1. Repackaging Archives
+### 71.2. Nested Libraries
+### 71.3. Finding a Main Class
+### 71.4. Example Repackage Implementation
+## 72. What to Read Next
+# Part IX. ‘How-to’ guides
+## 73. Spring Boot Application
+### 73.1. Create Your Own FailureAnalyzer
+### 73.2. Troubleshoot Auto-configuration
+### 73.3. Customize the Environment or ApplicationContext Before It Starts
+### 73.4. Build an ApplicationContext Hierarchy (Adding a Parent or Root Context)
+### 73.5. Create a Non-web Application
+## 74. Properties and Configuration
+### 74.1. Automatically Expand Properties at Build Time
+#### 74.1.1. Automatic Property Expansion Using Maven
+#### 74.1.2. Automatic Property Expansion Using Gradle
+### 74.2. Externalize the Configuration of SpringApplication
+### 74.3. Change the Location of External Properties of an Application
+### 74.4. Use ‘Short’ Command Line Arguments
+### 74.5. Use YAML for External Properties
+### 74.6. Set the Active Spring Profiles
+### 74.7. Change Configuration Depending on the Environment
+### 74.8. Discover Built-in Options for External Properties
+## 75. Embedded Web Servers
+### 75.1. Use Another Web Server
+### 75.2. Disabling the Web Server
+### 75.3. Change the HTTP Port
+### 75.4. Use a Random Unassigned HTTP Port
+### 75.5. Discover the HTTP Port at Runtime
+### 75.6. Enable HTTP Response Compression
+### 75.7. Configure SSL
+### 75.8. Configure HTTP/2
+#### 75.8.1. HTTP/2 with Undertow
+#### 75.8.2. HTTP/2 with Jetty
+#### 75.8.3. HTTP/2 with Tomcat
+### 75.9. Configure the Web Server
+### 75.10. Add a Servlet, Filter, or Listener to a Application
+#### 75.10.1. Add a Servlet, Filter, or Listener by Using a Spring Bean Disable Registration of a Servlet or Filter
+#### 75.10.2. Add Servlets, Filters, and Listeners by Using Classpath Scanning
+### 75.11. Configure Access Logging
+### 75.12. Running Behind a Front-end Proxy Server
+#### 75.12.1. Customize Tomcat’s Proxy Configuration
+### 75.13. Enable Multiple Connectors with Tomcat
+### 75.14. Use Tomcat’s LegacyCookieProcessor
+### 75.15. Enable Multiple Listeners with Undertow
+### 75.16. Create WebSocket Endpoints Using @ServerEndpoint
+## 76. Spring MVC
+### 76.1. Write a JSON REST Service
+### 76.2. Write an XML REST Service
+### 76.3. Customize the Jackson ObjectMapper
+### 76.4. Customize the @ResponseBody Rendering
+### 76.5. Handling Multipart File Uploads
+### 76.6. Switch Off the Spring MVC DispatcherServlet
+### 76.7. Switch off the Default MVC Configuration
+### 76.8. Customize ViewResolvers
+## 77. Jersey
+### 77.1. Secure Jersey endpoints with Spring Security
+## 78. HTTP Clients
+### 78.1. Configure RestTemplate to Use a Proxy
+## 79. Logging
+### 79.1. Configure Logback for Logging
+#### 79.1.1. Configure Logback for File-only Output
+### 79.2. Configure Log4j for Logging
+#### 79.2.1. Use YAML or JSON to Configure Log4j 2
+## 80. Data Access
+### 80.1. Configure a Custom DataSource
+### 80.2. Configure Two DataSources
+### 80.3. Use Spring Data Repositories
+### 80.4. Separate @Entity Definitions from Spring Configuration
+### 80.5. Configure JPA Properties
+### 80.6. Configure Hibernate Naming Strategy
+### 80.7. Use a Custom EntityManagerFactory
+### 80.8. Use Two EntityManagers
+### 80.9. Use a Traditional persistence.xml File
+### 80.10. Use Spring Data JPA and Mongo Repositories
+### 80.11. Expose Spring Data Repositories as REST Endpoint
+### 80.12. Configure a Component that is Used by JPA
+### 80.13. Configure jOOQ with Two DataSources
+## 81. Database Initialization
+### 81.1. Initialize a Database Using JPA
+### 81.2. Initialize a Database Using Hibernate
+### 81.3. Initialize a Database
+### 81.4. Initialize a Spring Batch Database
+### 81.5. Use a Higher-level Database Migration Tool
+#### 81.5.1. Execute Flyway Database Migrations on Startup
+#### 81.5.2. Execute Liquibase Database Migrations on Startup
+## 82. Messaging
+### 82.1. Disable Transacted JMS Session
+## 83. Batch Applications
+### 83.1. Execute Spring Batch Jobs on Startup
+## 84. Actuator
+### 84.1. Change the HTTP Port or Address of the Actuator Endpoints
+### 84.2. Customize the ‘whitelabel’ Error Page
+### 84.3. Sanitize sensible values
+## 85. Security
+### 85.1. Switch off the Spring Boot Security Configuration
+### 85.2. Change the UserDetailsService and Add User Accounts
+### 85.3. Enable HTTPS When Running behind a Proxy Server
+## 86. Hot Swapping
+### 86.1. Reload Static Content
+### 86.2. Reload Templates without Restarting the Container
+#### 86.2.1. Thymeleaf Templates
+#### 86.2.2. FreeMarker Templates
+#### 86.2.3. Groovy Templates
+### 86.3. Fast Application Restarts
+### 86.4. Reload Java Classes without Restarting the Container
+## 87. Build
+### 87.1. Generate Build Information
+### 87.2. Generate Git Information
+### 87.3. Customize Dependency Versions
+### 87.4. Create an Executable JAR with Maven
+### 87.5. Use a Spring Boot Application as a Dependency
+### 87.6. Extract Specific Libraries When an Executable Jar Runs
+### 87.7. Create a Non-executable JAR with Exclusions
+### 87.8. Remote Debug a Spring Boot Application Started with Maven
+### 87.9. Build an Executable Archive from Ant without Using spring-boot-antlib
+## 88. Traditional Deployment
+### 88.1. Create a Deployable War File
+### 88.2. Convert an Existing Application to Spring Boot
+### 88.3. Deploying a WAR to WebLogic
+### 88.4. Use Jedis Instead of Lettuce
+# Part X. Appendices
+## A. Common application properties
+## B. Configuration Metadata
+### B.1. Metadata Format
+#### B.1.1. Group Attributes
+#### B.1.2. Property Attributes
+#### B.1.3. Hint Attributes
+#### B.1.4. Repeated Metadata Items
+### B.2. Providing Manual Hints
+#### B.2.1. Value Hint
+#### B.2.2. Value Providers Any Class Reference Handle As Logger Name Spring Bean Reference Spring Profile Name
+### B.3. Generating Your Own Metadata by Using the Annotation Processor
+#### B.3.1. Nested Properties
+#### B.3.2. Adding Additional Metadata
+## C. Auto-configuration classes
+### C.1. From the “spring-boot-autoconfigure” module
+### C.2. From the “spring-boot-actuator-autoconfigure” module
+## D. Test auto-configuration annotations
+## E. The Executable Jar Format
+### E.1. Nested JARs
+#### E.1.1. The Executable Jar File Structure
+#### E.1.2. The Executable War File Structure
+### E.2. Spring Boot’s “JarFile” Class
+#### E.2.1. Compatibility with the Standard Java “JarFile”
+### E.3. Launching Executable Jars
+#### E.3.1. Launcher Manifest
+#### E.3.2. Exploded Archives
+### E.4. PropertiesLauncher Features
+### E.5. Executable Jar Restrictions
+### E.6. Alternative Single Jar Solutions
+## F. Dependency versions
