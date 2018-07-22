@@ -6,7 +6,7 @@ tags:
  - Spring Boot
 ---
 
-> Spring Boot官方文档翻译
+> Spring Boot官方文档翻译，水平有限，不喜勿喷
 
 <!-- more -->
 
@@ -20,9 +20,9 @@ Spring Boot参考指南有以下几种文档形式（官方）
 
 最新的文档可以在[docs.spring.io/spring-boot/docs/current/reference](https://docs.spring.io/spring-boot/docs/current/reference)查看
 ## 2. 获取帮助
-如果您在使用Spring Boot时遇到问题，可以参考以下内容：
+如果你在使用Spring Boot时遇到问题，可以参考以下内容：
  - 尝试使用[How-to documents](https://docs.spring.io/spring-boot/docs/2.0.3.RELEASE/reference/htmlsingle/#howto)，里面提供最常见的问题的解决方案。
- - 学习Spring基础知识。Spring Boot建立在许多其他Spring项目之上。[spring.io](https://spring.io/)网站提供了大量参考文档以供查看。如果您刚开始使用Spring，可以先从[guides](https://spring.io/guides)看起。
+ - 学习Spring基础知识。Spring Boot建立在许多其他Spring项目之上。[spring.io](https://spring.io/)网站提供了大量参考文档以供查看。如果你刚开始使用Spring，可以先从[guides](https://spring.io/guides)看起。
  - 在[stackoverflow.com](https://stackoverflow.com/)用`spring-boot`标签提交问题，我们会关注相关问题。
  - 在Spring Boot [Issue](https://github.com/spring-projects/spring-boot/issues)提交问题
 ## 3. 第一步
@@ -56,17 +56,49 @@ Spring Boot参考指南有以下几种文档形式（官方）
  - 构建工具插件：[Maven](#build-tool-plugins-maven-plugin) | [Gradle](#build-tool-plugins-gradle-plugin)
  - 附录：[Application Properties](#common-application-properties) | [Auto-configuration classes](#auto-configuration-classes) | [Executable Jars](#executable-jar)
 
-# Part II. Getting Started
+# Part II. 入门
+如果你刚开始使用Spring Boot或通常所说的的“Spring”，请首先阅读本节。它回答了基本的“是什么？”，“如何做？”以及“为什么？”等问题。包括Spring Boot简介以及安装说明。然后将引导你构建第一个Spring Boot应用程序，并在其中穿插讨论一些核心原则。
+
 <span id="getting-started-introducing-spring-boot"></span>
-## 8. Introducing Spring Boot
+## 8. Spring Boot简介
+Spring Boot使得构建一个基于Spring的可以运行的独立的生产级的应用程序变得更加轻松。我们用自己的观点来看待Spring平台和第三方库，这样你就可以轻松上手了。大多数Spring Boot应用程序只需要很少的Spring配置。
+你可以使用Spring Boot创建使用java -jar或更传统的war部署启动的Java应用程序。我们还提供了一个运行“spring脚本”的命令行工具。
+主要目标是：
+ - 为所有Spring开发提供更快且可广泛接收的入门体验。
+ - 开箱即用，且随着需求变更而可以迅速进行调整。
+ - 提供一系列对大型项目通用的非功能性特性（例如嵌入式服务器，安全性，指标，运行状况检查和外部化配置）。
+ - 绝对没有代码生成，也不需要XML配置。
+ 
 <span id="getting-started-system-requirements"></span>
-## 9. System Requirements
-### 9.1. Servlet Containers
+## 9. 系统要求
+Spring Boot 2.0.3.RELEASE需要**Java8或9**以及**Spring Framework 5.0.7.RELEASE**或以上版本，构建工具需要**Maven 3.2+**或**Gradle 4**
+
+### 9.1. Servlet 容器
+Spring Boot支持以下内置servlet容器：
+
+| 名称         | Servlet 版本 |
+| ------------ | ------------ |
+| Tomcat 8.5   | 3.1          |
+| Jetty 9.4    | 3.1          |
+| Undertow 1.4 | 3.1          |
+
+你也可以将Spring Boot应用程序部署到任何兼容Servlet 3.1+的容器。
+
 <span id="getting-started-installing-spring-boot"></span>
-## 10. Installing Spring Boot
-### 10.1. Installation Instructions for the Java Developer
+## 10. 安装 Spring Boot
+Spring Boot可以与“经典”Java开发工具一起使用，也可以通过命令行工具安装。不管哪种方式，你都需要安装**Java SDK 1.8**及以上版本。在进行安装之前，你应该使用使用以下命令检查一下当前的Java环境是否安装正确：
+```shelll
+java -version
+```
+如果你刚开始接触Java或者你想先试验一下Spring Boot，你可以先使用[Spring Boot CLI](#getting-started-installing-the-cli)（命令行界面）。或者你可以接续阅读“传统”安装说明。
+
+### 10.1. 针对Java开发者的安装说明
+你可以像使用任何标准Java库一样使用Spring Boot。只要在类路径中包含相应的spring-boot-*.jar文件。Spring Boot不需要任何特殊工具集成，因此你可以使用任何IDE或文本编辑器。此外，Spring Boot应用程序没有什么特别之处，因此你可以像运行任何其他Java程序一样运行和调试Spring Boot应用程序。
+虽然可以复制Spring Boot jar，但通常建议使用支持依赖关系管理的构建工具（例如Maven或Gradle）。
+
 #### 10.1.1. Maven Installation
 #### 10.1.2. Gradle Installation
+<span id="getting-started-installing-the-cli"></span>
 ### 10.2. Installing the Spring Boot CLI
 #### 10.2.1. Manual Installation
 #### 10.2.2. Installation with SDKMAN!
