@@ -141,7 +141,7 @@ public class MyWebAppInitializer extends AbstractAnnotationConfigDispatcherServl
 | [ViewResolver](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-viewresolver) | 解析从处理程序返回的基于String的逻辑视图名称，渲染实际`View`的返回给响应。 See [View Resolution](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-viewresolver) and [View Technologies](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-view). |
 | [LocaleResolver](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-localeresolver), [LocaleContextResolver](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-timezone) | 解析客户端正在使用的区域设置以及可能的时区，以便能够提供国际化视图。See [Locale](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-localeresolver). |
 | [ThemeResolver](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-themeresolver) | 解析Web应用程序可以使用的主题，例如，提供个性化布局。 See [Themes](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-themeresolver). |
-| [MultipartResolver](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-multipart) | 用于在一些multipart解析库的帮助下解析multipart请求（例如，浏览器表单文件上载）的抽象。 See [Multipart resolver](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-multipart). |
+| [MultipartResolver](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-multipart) | 用于在一些分片解析库的帮助下解析分片请求（例如，浏览器表单文件上载）的抽象。 See [Multipart resolver](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-multipart). |
 | [FlashMapManager](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-flash-attributes) | 存储和检索“输入”和“输出”FlashMap，可用于将属性从一个请求传递到另一个请求，通常是通过重定向。 See [Flash attributes](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-flash-attributes). |
 
 ### 1.2.3. Web MVC配置
@@ -214,6 +214,7 @@ public class MyWebAppInitializer extends AbstractDispatcherServletInitializer {
 ```
 
 `AbstractDispatcherServletInitializer`还提供了一种方便的方法来添加`Filter`实例并使它们自动映射到`DispatcherServlet`：
+
 ```java
 public class MyWebAppInitializer extends AbstractDispatcherServletInitializer {
 
@@ -226,6 +227,41 @@ public class MyWebAppInitializer extends AbstractDispatcherServletInitializer {
     }
 }
 ```
+
 每个过滤器都根据其具体类型添加默认名称，并自动映射到`DispatcherServlet`。
 `AbstractDispatcherServletInitializer`的`isAsyncSupported`受保护方法提供了一个单独的位置来启用`DispatcherServlet`上的异步支持以及映射到它的所有过滤器。默认情况下，此标志设置为`true`。
 最后，如果还需要进一步自定义`DispatcherServlet`本身，则可以覆盖`createDispatcherServlet`方法。
+
+### 1.2.5. 处理流程
+
+`DispatcherServlet`按如下方式处理请求：
+
+- `WebApplicationContext`作为一个属性被搜索和绑定在请求中，流程中的控制器和其他元素都可以使用它。它默认绑定在键`DispatcherServlet.WEB_APPLICATION_CONTEXT_ATTRIBUTE下`。
+- 语言环境解析器绑定到请求，以使进程中的元素能够解析处理请求时使用的语言环境（呈现视图，准备数据等）。如果您不需要区域设置解析，则不需要它。
+- 主题解析器绑定到请求，以允许视图等元素确定要使用的主题。如果您不使用主题，则可以忽略它。
+- 如果指定了分片文件解析程序，则会检查请求的分片;如果存在分批，请求将被包装在`MultipartHttpServletRequest`中，以供进程中的其他元素进一步处理。有关多部分处理的更多信息，请参见`Multipart解析器`。
+- 搜索是否有适当的处理程序。如果找到处理程序，则执行与处理程序（预处理程序，后处理程序和控制器）关联的执行链以准备模型或渲染视图。或者，对于带注解的控制器，可以呈现响应（在`HandlerAdapter`内）而不是返回视图。
+- 如果返回模型，则渲染视图。如果没有返回模型（可能是由于预处理器或后处理器拦截请求，可能是出于安全原因），则不会渲染任何视图，因为该请求可能已经完成。
+
+`WebApplicationContext`中声明的`HandlerExceptionResolver`bean用于解决在请求处理期间抛出的异常。这些异常解析器允许自定义逻辑以解决异常。有关详细信息，请参阅Exceptions。
+Spring `DispatcherServlet`还支持返回Servlet API所指定的最后修改日期。确定特定请求的最后修改日期的过程很简单：`DispatcherServlet`查找适当的处理程序映射并测试其是否实现`LastModified`接口。如果是的话，`LastModified`接口的`long getLastModified（request）`方法的值将返回给客户端。
+您可以通过将Servlet初始化参数（`init-param`元素）添加到web.xml文件中的`Servlet`声明来自定义各个`DispatcherServlet`实例。有关支持的参数列表，请参阅下表。
+
+*表 1. DispatcherServlet初始化参数*
+
+| 参数                        | 说明                                                  |
+| -------------------------------- | ------------------------------------------------------------ |
+| contextClass                   | 实现`WebApplicationContext`的类，它实例化此Servlet使用的上下文。默认情况下，使用`XmlWebApplicationContext`。|
+| contextConfigLocation          | 传递给上下文实例（由contextClass指定）的字符串，用于指示可以找到上下文的位置。该字符串可能包含多个字符串（使用逗号作为分隔符）以支持多个上下文。如果多个上下文位置的bean定义了两次，则最新位置优先。 |
+| namespace                      | `WebApplicationContext`的命名空间。默认为`[servlet-name] -servlet`。 |
+| throwExceptionIfNoHandlerFound | 在没有找到请求的处理程序时是否抛出`NoHandlerFoundException`。然后可以使用`HandlerExceptionResolver`捕获异常，例如通过`@ExceptionHandler`控制器方法，并处理任何其他方法。默认情况下，它设置为“false”，在这种情况下，`DispatcherServlet`将响应状态设置为404（NOT_FOUND），而不会引发异常。请注意，如果还配置了[默认servlet处理]()，则始终将未解析的请求转发到默认servlet，并且永远不会引发404。|
+
+### 1.2.6. 拦截器
+所有`HandlerMapping`实现都支持处理程序拦截器，当你要将特定功能应用于某些请求时（例如，检查主体），这些处理程序拦截器很有用。拦截器必须实现`org.springframework.web.servlet`包中的`HandlerInterceptor`接口并重写三个方法，这些方法应该提供足够的灵活性来执行各种预处理和后处理：
+- `preHandle(..)` - 在执行实际处理程序之前
+- `postHandle(..)` - 处理程序执行后
+- `afterCompletion(..)` - 完成请求完成后
+
+`preHandle(..)`方法返回一个布尔值。可以使用此方法来中断或继续执行链的处理。当此方法返回`true`时，处理程序执行链将继续;当它返回`false`时，`DispatcherServlet`假定拦截器本身已处理请求（例如，呈现了适当的视图），并且不继续执行执行链中的其他拦截器和实际处理程序。
+有关如何配置[拦截器]()的示例，请参阅MVC配置一节中的拦截器。也可以通过各个`HandlerMapping`实现的setter方法直接注册它们。
+请注意，`postHandle`对于`@ResponseBody`和`ResponseEntity`方法不太有用，因为响应是在`HandlerAdapter`中、`postHandle`之前编写和提交的。这意味着对响应进行任何更改都太晚了，例如添加额外的`header`。对于此类方案，您可以实现`ResponseBodyAdvice`并将其声明为[Controller Advice]()bean或直接在`RequestMappingHandlerAdapter`上进行配置。
