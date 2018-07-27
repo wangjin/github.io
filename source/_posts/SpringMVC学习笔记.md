@@ -148,3 +148,84 @@ public class MyWebAppInitializer extends AbstractAnnotationConfigDispatcherServl
 应用程序可以根据处理请求所需，声明特殊Bean类型中列出的基础结构bean。`DispatcherServlet`检查每个特殊bean的`WebApplicationContext`。如果没有匹配的bean类型，它将回退到`DispatcherServlet.properties`中列出的默认类型。
 在大多数情况下，MVC Config是最佳起点。它以Java或XML声明所需的bean，并提供更高级别的配置回调API来支持自定义。
 > Spring Boot依赖于MVC Java配置来配置Spring MVC，还提供了许多额外的便捷选项。
+
+### 1.2.4. Servlet配置
+在Servlet 3.0+环境中，您可以选择以编程方式配置Servlet容器作为替代方法，也可以与web.xml文件结合使用。下面是注册`DispatcherServlet`的示例：
+```java
+import org.springframework.web.WebApplicationInitializer;
+
+public class MyWebApplicationInitializer implements WebApplicationInitializer {
+
+    @Override
+    public void onStartup(ServletContext container) {
+        XmlWebApplicationContext appContext = new XmlWebApplicationContext();
+        appContext.setConfigLocation("/WEB-INF/spring/dispatcher-config.xml");
+
+        ServletRegistration.Dynamic registration = container.addServlet("dispatcher", new DispatcherServlet(appContext));
+        registration.setLoadOnStartup(1);
+        registration.addMapping("/");
+    }
+}
+```
+`WebApplicationInitializer`是Spring MVC提供的一个接口，可确保检测到你的实现并自动用于初始化任何Servlet 3容器。实现`WebApplicationInitializer`的抽象基类`AbstractDispatcherServletInitializer`通过简单地重写方法来指定servlet映射和`DispatcherServlet`配置的位置，使得注册`DispatcherServlet`变得更容易。
+
+对于使用基于Java的Spring配置的应用程序，建议使用此方法：
+```java
+public class MyWebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+
+    @Override
+    protected Class<?>[] getRootConfigClasses() {
+        return null;
+    }
+
+    @Override
+    protected Class<?>[] getServletConfigClasses() {
+        return new Class<?>[] { MyWebConfig.class };
+    }
+
+    @Override
+    protected String[] getServletMappings() {
+        return new String[] { "/" };
+    }
+}
+```
+
+如果使用基于XML的Spring配置，则应直接`从AbstractDispatcherServletInitializer`扩展：
+```java
+public class MyWebAppInitializer extends AbstractDispatcherServletInitializer {
+
+    @Override
+    protected WebApplicationContext createRootApplicationContext() {
+        return null;
+    }
+
+    @Override
+    protected WebApplicationContext createServletApplicationContext() {
+        XmlWebApplicationContext cxt = new XmlWebApplicationContext();
+        cxt.setConfigLocation("/WEB-INF/spring/dispatcher-config.xml");
+        return cxt;
+    }
+
+    @Override
+    protected String[] getServletMappings() {
+        return new String[] { "/" };
+    }
+}
+```
+
+`AbstractDispatcherServletInitializer`还提供了一种方便的方法来添加`Filter`实例并使它们自动映射到`DispatcherServlet`：
+```java
+public class MyWebAppInitializer extends AbstractDispatcherServletInitializer {
+
+    // ...
+
+    @Override
+    protected Filter[] getServletFilters() {
+        return new Filter[] {
+            new HiddenHttpMethodFilter(), new CharacterEncodingFilter() };
+    }
+}
+```
+每个过滤器都根据其具体类型添加默认名称，并自动映射到`DispatcherServlet`。
+`AbstractDispatcherServletInitializer`的`isAsyncSupported`受保护方法提供了一个单独的位置来启用`DispatcherServlet`上的异步支持以及映射到它的所有过滤器。默认情况下，此标志设置为`true`。
+最后，如果还需要进一步自定义`DispatcherServlet`本身，则可以覆盖`createDispatcherServlet`方法。
