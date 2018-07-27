@@ -143,3 +143,8 @@ public class MyWebAppInitializer extends AbstractAnnotationConfigDispatcherServl
 | [ThemeResolver](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-themeresolver) | 解析Web应用程序可以使用的主题，例如，提供个性化布局。 See [Themes](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-themeresolver). |
 | [MultipartResolver](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-multipart) | 用于在一些multipart解析库的帮助下解析multipart请求（例如，浏览器表单文件上载）的抽象。 See [Multipart resolver](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-multipart). |
 | [FlashMapManager](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-flash-attributes) | 存储和检索“输入”和“输出”FlashMap，可用于将属性从一个请求传递到另一个请求，通常是通过重定向。 See [Flash attributes](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-flash-attributes). |
+
+### 1.2.3. Web MVC配置
+应用程序可以根据处理请求所需，声明特殊Bean类型中列出的基础结构bean。`DispatcherServlet`检查每个特殊bean的`WebApplicationContext`。如果没有匹配的bean类型，它将回退到`DispatcherServlet.properties`中列出的默认类型。
+在大多数情况下，MVC Config是最佳起点。它以Java或XML声明所需的bean，并提供更高级别的配置回调API来支持自定义。
+> Spring Boot依赖于MVC Java配置来配置Spring MVC，还提供了许多额外的便捷选项。
