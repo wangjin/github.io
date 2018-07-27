@@ -127,3 +127,19 @@ public class MyWebAppInitializer extends AbstractAnnotationConfigDispatcherServl
 </web-app>
 ```
 > 如果不需要应用程序上下文层次结构，则应用程序可以仅配置“根”上下文，并将`contextConfigLocation`Servlet参数设为空。
+
+### 1.2.2. 特殊bean类型
+`DispatcherServlet`委托特殊bean处理请求并呈现适当的响应。 “特殊bean”是指由Spring管理的，实现WebFlux框架约定的Object实例。那些通常带有内置约定，但也可以自定义其属性，扩展或替换它们。
+
+下表列出了会被`DispatcherHandler`检测到的特殊bean：
+
+| Bean type                                                    | Explanation                                                  |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| [HandlerMapping](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-handlermapping) | 将请求映射到处理程序以及用于预处理和后处理的拦截器列表。映射基于某些标准，其细节因`HandlerMapping`实现而异。 两个主要的`HandlerMapping`实现是`RequestMappingHandlerMapping`，它支持`@RequestMapping`带注解的方法和`SimpleUrlHandlerMapping`，它维护对处理程序的URI路径模式的显式注册。|
+| HandlerAdapter                                               | 无论实际调用处理程序如何，都帮助`DispatcherServlet`调用映射到请求的处理程序。例如，调用带注解的控制器需要解析注解。 `HandlerAdapter`的主要目的是保护`DispatcherServlet`不受此类细节的影响。|
+| [HandlerExceptionResolver](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-exceptionhandlers) | 解决异常的策略，可能将它们映射到处理程序，或HTML错误视图或其他。请参阅Exceptions。|
+| [ViewResolver](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-viewresolver) | 解析从处理程序返回的基于String的逻辑视图名称，渲染实际`View`的返回给响应。 See [View Resolution](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-viewresolver) and [View Technologies](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-view). |
+| [LocaleResolver](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-localeresolver), [LocaleContextResolver](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-timezone) | 解析客户端正在使用的区域设置以及可能的时区，以便能够提供国际化视图。See [Locale](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-localeresolver). |
+| [ThemeResolver](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-themeresolver) | 解析Web应用程序可以使用的主题，例如，提供个性化布局。 See [Themes](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-themeresolver). |
+| [MultipartResolver](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-multipart) | 用于在一些multipart解析库的帮助下解析multipart请求（例如，浏览器表单文件上载）的抽象。 See [Multipart resolver](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-multipart). |
+| [FlashMapManager](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-flash-attributes) | 存储和检索“输入”和“输出”FlashMap，可用于将属性从一个请求传递到另一个请求，通常是通过重定向。 See [Flash attributes](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-flash-attributes). |
