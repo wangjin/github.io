@@ -265,3 +265,53 @@ Spring `DispatcherServlet`还支持返回Servlet API所指定的最后修改日�
 `preHandle(..)`方法返回一个布尔值。可以使用此方法来中断或继续执行链的处理。当此方法返回`true`时，处理程序执行链将继续;当它返回`false`时，`DispatcherServlet`假定拦截器本身已处理请求（例如，呈现了适当的视图），并且不继续执行执行链中的其他拦截器和实际处理程序。
 有关如何配置[拦截器]()的示例，请参阅MVC配置一节中的拦截器。也可以通过各个`HandlerMapping`实现的setter方法直接注册它们。
 请注意，`postHandle`对于`@ResponseBody`和`ResponseEntity`方法不太有用，因为响应是在`HandlerAdapter`中、`postHandle`之前编写和提交的。这意味着对响应进行任何更改都太晚了，例如添加额外的`header`。对于此类方案，您可以实现`ResponseBodyAdvice`并将其声明为[Controller Advice]()bean或直接在`RequestMappingHandlerAdapter`上进行配置。
+
+### 1.2.7. 异常
+如果在请求映射期间发生异常或从请求处理程序（如`@Controller`）抛出异常，`DispatcherServlet`将委托给`HandlerExceptionResolver`bean链以解决异常并提供备用处理，通常是一个错误响应。
+
+下表列出了可用的`HandlerExceptionResolver`实现：
+
+表2. *`HandlerExceptionResolver`实现*
+
+| HandlerExceptionResolver                                     | 描述                                                  |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| SimpleMappingExceptionResolver                            | 异常类名称和错误视图名称之间的映射。用于在浏览器应用程序中呈现错误页面。 |
+| [DefaultHandlerExceptionResolver]() | 解决Spring MVC引发的异常并将它们映射到HTTP状态代码。另请参阅ResponseEntityExceptionHandler和[REST API异常]()。 |
+| ResponseStatusExceptionResolver                           | 使用@ResponseStatus注释解析异常，并根据注解中的值将它们映射到HTTP状态代码。 |
+| ExceptionHandlerExceptionResolver                         | 通过在@Controller或@ControllerAdvice类中调用@ExceptionHandler方法来解决异常。请参阅[@ExceptionHandler方法]()。|
+
+#### 解析器链
+只需在Spring配置中声明多个`HandlerExceptionResolver`bean并根据需要设置其`order`属性，就可以形成异常解析器链。order属性越高，异常解析器定位的越晚。
+
+`HandlerExceptionResolver`的合约指定它可以返回：
+- 指向错误视图的`ModelAndView`
+- 如果在解析程序中处理异常，则清空`ModelAndView`。
+- 如果异常仍然未解决，则为`null`，以供后续解析器尝试;如果异常保留在最后，则允许传播到Servlet容器。
+
+[MVC配置]()自动声明内置的解析器，用于默认的Spring MVC异常，`@ResponseStatus`带注解的异常，以及对`@ExceptionHandler`方法的支持。可以自定义该列表或替换它。
+
+#### 容器错误页面
+
+如果任何`HandlerExceptionResolver`仍未解决异常并因此将其传播，或者如果响应状态设置为错误状态（即4xx，5xx），则Servlet容器可能会呈现HTML中的默认错误页面。要自定义容器的默认错误页面，可以在`web.xml`中声明错误页面映射：
+```xml
+<error-page>
+    <location>/error</location>
+</error-page>
+```
+
+鉴于上述情况，当异常传播或响应具有错误状态时，Servlet容器会在容器内对配置的URL进行ERROR调度（例如“/error”）。然后由`DispatcherServlet`处理，可以将其映射到`@Controller`，实现该控制器以返回带有模型的错误视图名称或渲染JSON响应，如下所示：
+```java
+@RestController
+public class ErrorController {
+
+    @RequestMapping(path = "/error")
+    public Map<String, Object> handle(HttpServletRequest request) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("status", request.getAttribute("javax.servlet.error.status_code"));
+        map.put("reason", request.getAttribute("javax.servlet.error.message"));
+        return map;
+    }
+}
+```
+
+> Servlet API没有提供在Java中创建错误页面映射的方法。但是，可以同时使用`WebApplicationInitializer`和最小的`web.xml`。
