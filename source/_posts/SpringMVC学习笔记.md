@@ -129,7 +129,7 @@ public class MyWebAppInitializer extends AbstractAnnotationConfigDispatcherServl
 > 如果不需要应用程序上下文层次结构，则应用程序可以仅配置“根”上下文，并将`contextConfigLocation`Servlet参数设为空。
 
 ### 1.2.2. 特殊bean类型
-`DispatcherServlet`委托特殊bean处理请求并呈现适当的响应。 “特殊bean”是指由Spring管理的，实现WebFlux框架约定的Object实例。那些通常带有内置约定，但也可以自定义其属性，扩展或替换它们。
+`DispatcherServlet`委托特殊bean处理请求并渲染适当的响应。 “特殊bean”是指由Spring管理的，实现WebFlux框架约定的Object实例。那些通常带有内置约定，但也可以自定义其属性，扩展或替换它们。
 
 下表列出了会被`DispatcherHandler`检测到的特殊bean：
 
@@ -275,7 +275,7 @@ Spring `DispatcherServlet`还支持返回Servlet API所指定的最后修改日�
 
 | HandlerExceptionResolver                                     | 描述                                                  |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| SimpleMappingExceptionResolver                            | 异常类名称和错误视图名称之间的映射。用于在浏览器应用程序中呈现错误页面。 |
+| SimpleMappingExceptionResolver                            | 异常类名称和错误视图名称之间的映射。用于在浏览器应用程序中渲染错误页面。 |
 | [DefaultHandlerExceptionResolver]() | 解决Spring MVC引发的异常并将它们映射到HTTP状态代码。另请参阅ResponseEntityExceptionHandler和[REST API异常]()。 |
 | ResponseStatusExceptionResolver                           | 使用@ResponseStatus注释解析异常，并根据注解中的值将它们映射到HTTP状态代码。 |
 | ExceptionHandlerExceptionResolver                         | 通过在@Controller或@ControllerAdvice类中调用@ExceptionHandler方法来解决异常。请参阅[@ExceptionHandler方法]()。|
@@ -288,7 +288,7 @@ Spring `DispatcherServlet`还支持返回Servlet API所指定的最后修改日�
 - 如果在解析程序中处理异常，则清空`ModelAndView`。
 - 如果异常仍然未解决，则为`null`，以供后续解析器尝试;如果异常保留在最后，则允许传播到Servlet容器。
 
-[MVC配置]()自动声明内置的解析器，用于默认的Spring MVC异常，`@ResponseStatus`带注解的异常，以及对`@ExceptionHandler`方法的支持。可以自定义该列表或替换它。
+[MVC配置]()自动声明内置的解析器，用于默认的Spring MVC异常，`@ResponseStatus`带注解的异常，以及对`@ExceptionHandler`方法的支持。也可以自定义该列表或替换它。
 
 #### 容器错误页面
 
@@ -315,3 +315,37 @@ public class ErrorController {
 ```
 
 > Servlet API没有提供在Java中创建错误页面映射的方法。但是，可以同时使用`WebApplicationInitializer`和最小的`web.xml`。
+
+### 1.2.8. 视图解析
+Spring MVC定义了`ViewResolver`和`View`接口，使你能够在浏览器中渲染模型，而无需自己使用特殊的视图技术。`ViewResolver`提供视图名称和实际视图之间的映射。`View`在移交给特定视图技术之前讲需要处理的数据准备好。
+
+下表提供了有关`ViewResolver`层次结构的更多详细信息：
+表3.*ViewResolver实现*
+
+| ViewResolver                       | 描述                                                         |
+| -------------------------------- | ------------------------------------------------------------ |
+| AbstractCachingViewResolver    | `AbstractCachingViewResolver`的子类缓存其解析的视图实例。缓存可提高某些视图技术的性能。可以通过将`cache`属性设置为`false`以关闭缓存。此外，如果必须在运行时刷新某个视图（例如，当修改FreeMarker模板时），则可以使用`removeFromCache(String viewName, Locale loc)`方法。 |
+| XmlViewResolver                | `ViewResolver`的实现接受使用与Spring的XML bean工厂相同的DTD以XML编写的配置文件。默认配置文件是 `/WEB-INF/views.xml`。 |
+| ResourceBundleViewResolver     | `ViewResolver`的实现在`ResourceBundle`中使用bean定义，由bundle基本名称指定，并且对于它应该解析的每个视图，它使用属性的值`[viewname].(class)`作为视图类，并使用属性的值`[viewname].url`作为视图url。示例可以在[View Technologies]()一章中找到 。 |
+| UrlBasedViewResolver           | 简单实现`ViewResolver`接口，实现将逻辑视图名称直接解析为URL，而无需显式映射定义。如果你的逻辑名称以直接的方式与视图资源的名称匹配，则这是合适的，而不需要任何映射。 |
+| InternalResourceViewResolver   | 方便使用的子类`UrlBasedViewResolver`支持`InternalResourceView`（实际上，Servlet和JSP）和其他子类，如`JstlView`和`TilesView`。你可以使用`setViewClass(..)`指定此解析程序生成的所有视图的视图类 。有关`UrlBasedViewResolver`详细信息，请参阅javadocs。 |
+| FreeMarkerViewResolver         | 方便使用的子类`UrlBasedViewResolver`支持`FreeMarkerView`及其自定义子类。 |
+| ContentNegotiatingViewResolver` | `ViewResolver`接口的实现，用于解析基于请求的文件名或`Accept`请求头的视图。请参阅[内容协商]()。 |
+
+#### 处理
+你可以通过声明多个解析程序bean来链接视图解析程序，并在必要时通过设置order属性来指定排序。请记住，order属性越高，视图解析器在链中的位置越靠后。
+`ViewResolver`约定它*可以*返回null以表示无法找到该视图。但是，对于JSP和`InternalResourceViewResolver`，确定JSP是否存在的唯一方法是通过`RequestDispatcher`执行调度。因此，必须始终将`InternalResourceViewResolver`配置为视图解析器的整体顺序中的最后一个。
+配置视图解析就像在Spring配置中添加`ViewResolver`bean一样简单。[MVC Config]()为[View Resolvers]()提供了一个专用的配置API，并且还提供了无逻辑的[View控制器]()，这些控制器对于渲染没有控制器逻辑的HTML模板非常有用。
+
+#### 重定向
+视图名称中的特殊前缀`redirect:`允许你执行重定向。`UrlBasedViewResolver`（和子类）将此识别为需要重定向的指令。视图名称的其余部分是重定向URL。
+控制器返回`RedirectView`可以达到相同的效果，但现在控制器本身可以简单地按照逻辑视图名称进行操作。逻辑视图名称（例如`redirect:/myapp/some/resource`）将相对于当前Servlet上下文重定向，而诸如`redirect:http//myhost.com/some/arbitrary/path`之类的名称将重定向到绝对URL。
+请注意，如果使用`@ResponseStatus`注解控制器方法，则注解值优先于`RedirectView`设置的响应状态。
+
+#### 转发
+对于最终由`UrlBasedViewResolver`及其子类解析的视图名称，也可以使用特殊的`forward:`前缀。这将创建一个`InternalResourceView`，它执行`RequestDispatcher.forward()`。因此，此前缀对于`InternalResourceViewResolver`和`InternalResourceView`（对于JSP）没有用，但如果使用其他视图技术，但仍希望强制Servlet/JSP引擎处理资源的转发，则它可能会有所帮助。请注意，你也可以链接多个视图解析器。
+
+#### 内容协调
+`ContentNegotiatingViewResolver`本身不解析视图，而是委托给其他视图解析器，并选择类似于客户端请求的表示的视图。该表示可以从`Accept`请求头或查询参数确定，例如，"/path?format=pdf"。
+`ContentNegotiatingViewResolver`通过将请求媒体类型与与其每个`ViewResolvers`关联的View支持的媒体类型（也称为`Content-Type`）进行比较，选择适当的`View`来处理请求。列表中具有兼容`Content-Type`的第一个`View`将表示返回给客户端。如果`ViewResolver`链无法提供兼容视图，则将查询通过`DefaultViews`属性指定的视图列表。后一个选项适用于单个视图，它可以呈现当前资源的适当表示，而不管逻辑视图名称如何。 `Accept`请求头可以包括通配符，例如`text/*`，在这种情况下，Content-Type为`text/xml`的`View`就是兼容的匹配。
+有关配置详细信息，请参阅[MVC配置]()下的[视图解析器]()章节。
