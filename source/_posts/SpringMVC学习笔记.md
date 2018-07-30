@@ -447,3 +447,30 @@ background=/themes/cool/img/coolBg.jpg
 | CookieThemeResolver  | 所选主题存储在客户端的cookie中。      |
 
 Spring还提供了一个`ThemeChangeInterceptor`，它允许使用简单的请求参数对每个请求进行主题更改。
+
+### 1.2.11. 分片解析器
+`org.springframework.web.multipart`包中的`MultipartResolver`是一种用于解析包括文件上载在内的分片请求的策略。有一个基于[Commons FileUpload](https://jakarta.apache.org/commons/fileupload)的实现，以及一个基于Servlet 3.0的分片请求解析。
+要启用分片处理，需要在`DispatcherServlet`Spring配置中声明一个名为"multipartResolver"的`MultipartResolver`bean。 `DispatcherServlet`检测到它并将其应用于传入请求。当收到内容类型为“multipart/form-data”的POST请求时，解析器解析内容并将当前的`HttpServletRequest`包装为`MultipartHttpServletRequest`，以便除了将它们作为请求参数公开之外，还提供对已解析部分的访问。
+
+#### Apache FileUpload
+要使用Apache Commons FileUpload，只需注册一个名为"multipartResolver"类型为`CommonsMultipartResolver`的bean。当然，你还需要在classpath中添加`commons-fileupload`依赖。
+
+#### Servlet 3.0
+通过Servlet容器配置启用Servlet 3.0分片解析：
+- 在Java中，在Servlet注册上设置`MultipartConfigElemen`t
+- 在`web.xml`中，将`"<multipart-config>"`部分添加到servlet声明中。
+```java
+public class AppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+
+    // ...
+
+    @Override
+    protected void customizeRegistration(ServletRegistration.Dynamic registration) {
+
+        // Optionally also set maxFileSize, maxRequestSize, fileSizeThreshold
+        registration.setMultipartConfig(new MultipartConfigElement("/tmp"));
+    }
+
+}
+```
+一旦Servlet 3.0配置到位，只需添加名为"multipartResolver"，类型为`StandardServletMultipartResolver`的bean。
