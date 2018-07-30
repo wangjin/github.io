@@ -474,3 +474,59 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
 }
 ```
 一旦Servlet 3.0配置到位，只需添加名为"multipartResolver"，类型为`StandardServletMultipartResolver`的bean。
+
+## 1.3. 过滤器
+延后
+
+## 1.4. 控制器注解
+Spring MVC提供了一个基于注解的编程模型，其中`@Controller`和`@RestController`组件使用注解来表示请求映射，请求输入，异常处理等。带注解的控制器具有灵活的方法签名，不必扩展基类，也不必实现特定的接口。
+```java
+@Controller
+public class HelloController {
+
+    @GetMapping("/hello")
+    public String handle(Model model) {
+        model.addAttribute("message", "Hello World!");
+        return "index";
+    }
+}
+```
+在这个特定示例中，该方法接受`Model`并将视图名称作为`String`值返回，还有许多其他选项，本章将在下面进一步说明。
+
+> 有关[spring.io](https://spring.io/guides)的指南和教程，请使用本节中介绍的基于注解的编程模型。
+
+### 1.4.1. 声明
+你可以使用Servlet的`WebApplicationContext`中的标准Spring bean定义来定义控制器bean。`@Controller`构造型允许自动检测，与Spring一致支持，以检测类路径中的`@Component`类，并为它们自动注册为bean。它还充当带注解类的构造型，表明它作为Web组件的角色。
+要启用此类`@Controller`bean的自动检测，可以将组件扫描添加到Java配置中：
+```java
+@Configuration
+@ComponentScan("org.example.web")
+public class WebConfig {
+
+    // ...
+}
+```
+
+xml配置方式：
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="org.example.web"/>
+
+    <!-- ... -->
+
+</beans>
+```
+`@RestController`是一个[组合注解](https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#beans-meta-annotations)，它本身用`@Controller`和`@ResponseBody`进行元注解，表示一个控制器，它的每个方法都继承了类型级`@ResponseBody`注解，因此直接写入响应体vs视图解析并使用HTML模板进行渲染。
+
+#### AOP 代理
+在某些情况下，控制器可能需要在运行时使用AOP代理进行修饰。例如，在控制器上直接使用`@Transactional`注解。在这种情况下，对于控制器而言，建议使用基于类的代理。这通常是控制器的默认选择。但是，如果控制器必须实现不是Spring Context回调的接口（例如`InitializingBean`，`*Aware`等），则可能需要显式配置基于类的代理。例如，将`<tx:annotation-driven/>`，更改为`<tx:annotation-driven proxy-target-class="true"/>`。
