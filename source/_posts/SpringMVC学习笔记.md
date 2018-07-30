@@ -68,7 +68,7 @@ public class MyWebApplicationInitializer implements WebApplicationInitializer {
 > Spring Boot遵循不同的初始化顺序。 Spring Boot使用Spring配置来引导自身和嵌入式Servlet容器，而不是挂钩到Servlet容器的生命周期。在Spring配置中检测`Filter`和`Servlet`声明，并在Servlet容器中注册。有关更多详细信息，请查看Spring Boot文档。
 
 ### 1.2.1. 上下文层次结构
-`DispatcherServlet`使用扩展自普通`ApplicationContext`的`WebApplicationContext`来进行自己的配置。 `WebApplicationContext`有一个指向它与之关联的`ServletContext`和`Servlet`的链接。它还绑定到`ServletContext`，以便应用程序在需要的时候可以使用`RequestContextUtils`中的静态方法来查找`WebApplicationContext`。
+`DispatcherServlet`使用扩展自普通`ApplicationContext`的`WebApplicationContext`来进行自己的配置。`WebApplicationContext`有一个指向它与之关联的`ServletContext`和`Servlet`的链接。它还绑定到`ServletContext`，以便应用程序在需要的时候可以使用`RequestContextUtils`中的静态方法来查找`WebApplicationContext`。
 对于许多应用程序而言，包含一个`WebApplicationContext`就已经足够了。也可以有一个上下文层次结构，其中一个根`WebApplicationContext`在多个`DispatcherServlet`（或其他`Servlet`）实例之间共享，每个实例都有自己的子`WebApplicationContext`配置。有关上下文层次结构功能的更多信息，请参阅`ApplicationContext`的其他功能。 
 根`WebApplicationContext`通常包含基础架构bean，例如需要跨多个`Servlet`实例共享的数据存储库和业务服务。这些bean是有效继承的，可以在特定于`Servlet`的子`WebApplicationContext`中重写（即重新声明），该子`WebApplicationContext`通常包含给定`Servlet`本地的bean：
 
@@ -136,7 +136,7 @@ public class MyWebAppInitializer extends AbstractAnnotationConfigDispatcherServl
 | Bean type                                                    | Explanation                                                  |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | [HandlerMapping](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-handlermapping) | 将请求映射到处理程序以及用于预处理和后处理的拦截器列表。映射基于某些标准，其细节因`HandlerMapping`实现而异。 两个主要的`HandlerMapping`实现是`RequestMappingHandlerMapping`，它支持`@RequestMapping`带注解的方法和`SimpleUrlHandlerMapping`，它维护对处理程序的URI路径模式的显式注册。|
-| HandlerAdapter                                               | 无论实际调用处理程序如何，都帮助`DispatcherServlet`调用映射到请求的处理程序。例如，调用带注解的控制器需要解析注解。 `HandlerAdapter`的主要目的是保护`DispatcherServlet`不受此类细节的影响。|
+| HandlerAdapter                                               | 无论实际调用处理程序如何，都帮助`DispatcherServlet`调用映射到请求的处理程序。例如，调用带注解的控制器需要解析注解。`HandlerAdapter`的主要目的是保护`DispatcherServlet`不受此类细节的影响。|
 | [HandlerExceptionResolver](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-exceptionhandlers) | 解决异常的策略，可能将它们映射到处理程序，或HTML错误视图或其他。请参阅Exceptions。|
 | [ViewResolver](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-viewresolver) | 解析从处理程序返回的基于String的逻辑视图名称，渲染实际`View`的返回给响应。 See [View Resolution](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-viewresolver) and [View Technologies](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-view). |
 | [LocaleResolver](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-localeresolver), [LocaleContextResolver](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-timezone) | 解析客户端正在使用的区域设置以及可能的时区，以便能够提供国际化视图。See [Locale](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-localeresolver). |
@@ -347,5 +347,67 @@ Spring MVC定义了`ViewResolver`和`View`接口，使你能够在浏览器中�
 
 #### 内容协调
 `ContentNegotiatingViewResolver`本身不解析视图，而是委托给其他视图解析器，并选择类似于客户端请求的表示的视图。该表示可以从`Accept`请求头或查询参数确定，例如，"/path?format=pdf"。
-`ContentNegotiatingViewResolver`通过将请求媒体类型与与其每个`ViewResolvers`关联的View支持的媒体类型（也称为`Content-Type`）进行比较，选择适当的`View`来处理请求。列表中具有兼容`Content-Type`的第一个`View`将表示返回给客户端。如果`ViewResolver`链无法提供兼容视图，则将查询通过`DefaultViews`属性指定的视图列表。后一个选项适用于单个视图，它可以呈现当前资源的适当表示，而不管逻辑视图名称如何。 `Accept`请求头可以包括通配符，例如`text/*`，在这种情况下，Content-Type为`text/xml`的`View`就是兼容的匹配。
+`ContentNegotiatingViewResolver`通过将请求媒体类型与与其每个`ViewResolvers`关联的View支持的媒体类型（也称为`Content-Type`）进行比较，选择适当的`View`来处理请求。列表中具有兼容`Content-Type`的第一个`View`将表示返回给客户端。如果`ViewResolver`链无法提供兼容视图，则将查询通过`DefaultViews`属性指定的视图列表。后一个选项适用于单个视图，它可以呈现当前资源的适当表示，而不管逻辑视图名称如何。`Accept`请求头可以包括通配符，例如`text/*`，在这种情况下，Content-Type为`text/xml`的`View`就是兼容的匹配。
 有关配置详细信息，请参阅[MVC配置]()下的[视图解析器]()章节。
+
+### 1.2.9. 语言环境
+Spring的体系结构大多数都支持国际化，就像Spring Web MVC框架一样。`DispatcherServlet`使你可以使用客户端的语言环境自动解析消息。通过`LocaleResolver`对象可以轻松完成。
+当接收到请求时，`DispatcherServlet`会查找区域设置解析程序，如果找到，则会尝试使用其来设置区域。使用`RequestContext.getLocale（)`方法，你始终可以检索由区域设置解析程序解析的区域设置。
+除了自动语言环境解析之外，你还可以将拦截器附加到处理程序映射（有关处理程序映射拦截器的更多信息，请参阅[拦截器]()）以在特定情况下更改语言环境，例如，根据请求中的参数。
+区域设置解析器和拦截器在`org.springframework.web.servlet.i18n`包中定义，并以通常方式在应用程序上下文中进行配置。以下是Spring中包含的语言环境解析器的选择。
+
+#### TimeZone
+除了获取客户端的区域设置外，了解其时区通常也很有用。`LocaleContextResolver`接口提供`LocaleResolver`的扩展，允许解析器提供更丰富的`LocaleContext`，其中可能包含时区信息。
+可用时，可以使用`RequestContext.getTimeZone()`方法获取用户的`TimeZone`。时区信息将由Spring的`ConversionService`注册的Date/Time `Converter`和`Formatter`对象自动使用。
+
+#### Header resolver
+该区域设置解析器检查客户端（例如，Web浏览器）发送的请求中的`accept-language`请求头。通常，此标头字段包含客户端操作系统的区域设置。*请注意，此解析程序不支持时区信息*。
+
+#### Cookie resolver
+此区域设置解析程序检查客户端上可能存在的`Cookie`，以查看是否指定了`Locale`或`TimeZone`。如果是，则使用指定的详细信息。使用此区域设置解析程序的属性，你可以指定cookie的名称以及最大年龄。下面是定义`CookieLocaleResolver`的示例。
+```xml
+<bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+
+    <property name="cookieName" value="clientlanguage"/>
+
+    <!-- in seconds. If set to -1, the cookie is not persisted (deleted when browser shuts down) -->
+    <property name="cookieMaxAge" value="100000"/>
+
+</bean>
+```
+
+*表4. CookieLocaleResolver 属性*
+
+| 属性         | 默认值                     | 描述                                                          |
+| ------------ | ------------------------- | ------------------------------------------------------------ |
+| cookieName   | 类名 + 区域设置        | cookie的名称                                              |
+| cookieMaxAge | Servlet 容器 默认 | Cookie在客户端上保持持久的最长时间。如果指定-1，则不会保留cookie;只有在客户端关闭浏览器之后才可用。 |
+| cookiePath   | /                         | 限制cookie对网站某个部分的可见性。指定cookiePath时，cookie只对该路径及其下方的路径可见。 |
+
+#### Session resolver
+`SessionLocaleResolver`允许你从可能与用户请求关联的会话中检索`Locale`和`TimeZone`。与`CookieLocaleResolver`相比，此策略将本地选择的区域设置存储在`Servlet`容器的`HttpSession`中。因此，这些设置对于每个会话来说都是临时的，因此在每个会话终止时都会丢失。
+请注意，与Spring Session项目等外部会话管理机制没有直接关系。此`SessionLocaleResolver`将简单地针对当前的`HttpServletRequest`评估和修改相应的`HttpSession`属性。
+
+#### Locale interceptor
+可以通过将`LocaleChangeInterceptor`添加到其中一个处理程序映射来启用语言环境的更改（请参阅[mvc-handlermapping]()）。它将检测请求中的参数并更改区域设置。在`LocaleResolver`上调用`setLocale()`，并且也存在于上下文中。以下示例显示对包含名为`siteLanguage`的参数的所有`*.view`资源的调用更改区域设置。因此，例如，对以下URL的请求`http://www.sf.net/home.view?siteLanguage=nl`会将站点语言更改为荷兰语。
+```xml
+<bean id="localeChangeInterceptor"
+        class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+    <property name="paramName" value="siteLanguage"/>
+</bean>
+
+<bean id="localeResolver"
+        class="org.springframework.web.servlet.i18n.CookieLocaleResolver"/>
+
+<bean id="urlMapping"
+        class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+    <property name="interceptors">
+        <list>
+            <ref bean="localeChangeInterceptor"/>
+        </list>
+    </property>
+    <property name="mappings">
+        <value>/**/*.view=someController</value>
+    </property>
+</bean>
+```
