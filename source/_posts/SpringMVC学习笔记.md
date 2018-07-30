@@ -330,7 +330,7 @@ Spring MVC定义了`ViewResolver`和`View`接口，使你能够在浏览器中�
 | UrlBasedViewResolver           | 简单实现`ViewResolver`接口，实现将逻辑视图名称直接解析为URL，而无需显式映射定义。如果你的逻辑名称以直接的方式与视图资源的名称匹配，则这是合适的，而不需要任何映射。 |
 | InternalResourceViewResolver   | 方便使用的子类`UrlBasedViewResolver`支持`InternalResourceView`（实际上，Servlet和JSP）和其他子类，如`JstlView`和`TilesView`。你可以使用`setViewClass(..)`指定此解析程序生成的所有视图的视图类 。有关`UrlBasedViewResolver`详细信息，请参阅javadocs。 |
 | FreeMarkerViewResolver         | 方便使用的子类`UrlBasedViewResolver`支持`FreeMarkerView`及其自定义子类。 |
-| ContentNegotiatingViewResolver` | `ViewResolver`接口的实现，用于解析基于请求的文件名或`Accept`请求头的视图。请参阅[内容协商]()。 |
+| ContentNegotiatingViewResolver | `ViewResolver`接口的实现，用于解析基于请求的文件名或`Accept`请求头的视图。请参阅[内容协商]()。 |
 
 #### 处理
 你可以通过声明多个解析程序bean来链接视图解析程序，并在必要时通过设置order属性来指定排序。请记住，order属性越高，视图解析器在链中的位置越靠后。
