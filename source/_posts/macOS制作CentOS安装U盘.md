@@ -46,3 +46,8 @@ diskutil unmountDisk /dev/disk2
 dd if=/Users/wangjin/Downloads/CentOS-7-x86_64-DVD-1708.iso of=/dev/disk2 bs=1m
 ```
 `bs=1m`表示设置写入块大小
+
+# 查看写入进度
+```bash
+sudo killall -29 dd
+```
