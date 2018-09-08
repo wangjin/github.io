@@ -53,7 +53,7 @@ $ docker-compose --version
 $ sudo rm /usr/local/bin/docker-compose
 ```
 
-# 官方Start Up
+# 官方Starting Up
 
 ## 步骤一：设置
 1. 创建一个测试目录
