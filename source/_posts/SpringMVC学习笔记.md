@@ -418,7 +418,7 @@ Spring的体系结构大多数都支持国际化，就像Spring Web MVC框架一
 #### 定义主题
 要在Web应用程序中使用主题，必须实现`org.springframework.ui.context.ThemeSource`接口。`WebApplicationContext`接口扩展了`ThemeSource`，但将其职责委托给专用实现。默认情况下，委托将是一个`org.springframework.ui.context.support.ResourceBundleThemeSource`实现，它从类路径的根目录加载属性文件。要使用自定义`ThemeSource`实现或配置`ResourceBundleThemeSource`的基本名称前缀，可以在应用程序上下文中使用保留名称`themeSource`注册bean。 Web应用程序上下文自动检测具有该名称的bean并使用它。
 使用`ResourceBundleThemeSource`时，主题在简单属性文件中定义。属性文件列出构成主题的资源。例如：
-```
+```properties
 styleSheet=/themes/cool/style.css
 background=/themes/cool/img/coolBg.jpg
 ```
@@ -530,3 +530,93 @@ xml配置方式：
 
 #### AOP 代理
 在某些情况下，控制器可能需要在运行时使用AOP代理进行修饰。例如，在控制器上直接使用`@Transactional`注解。在这种情况下，对于控制器而言，建议使用基于类的代理。这通常是控制器的默认选择。但是，如果控制器必须实现不是Spring Context回调的接口（例如`InitializingBean`，`*Aware`等），则可能需要显式配置基于类的代理。例如，将`<tx:annotation-driven/>`，更改为`<tx:annotation-driven proxy-target-class="true"/>`。
+
+### 1.4.2. 请求映射
+`@RequestMapping`注解用于将请求映射到控制器方法。它具有各种属性，可通过URL，HTTP方法，请求参数，请求头和媒体类型进行匹配。它可以在类级别用于表示共享映射，也可以在方法级别用于缩小到特定端点映射。
+`@RequestMapping`还有其他的HTTP方法特定快捷方式变体：
+- `@GetMapping`
+- `@PostMapping`
+- `@PutMapping`
+- `@DeleteMapping`
+- `@PatchMapping`
+
+以上是开箱即用的[自定义注解]()，因为可以说大多数控制器方法应该映射到特定的HTTP方法，而不是使用默认与所有HTTP方法匹配的`@RequestMapping`。同时，在类级别仍然需要`@RequestMapping`来表示共享映射。
+
+下面是类型和方法级别映射的示例：
+```java
+@RestController
+@RequestMapping("/persons")
+class PersonController {
+
+    @GetMapping("/{id}")
+    public Person getPerson(@PathVariable Long id) {
+        // ...
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public void add(@RequestBody Person person) {
+        // ...
+    }
+}
+```
+
+#### URI 模式
+可以使用glob模式和通配符映射请求：
+- `?`匹配一个字符
+- `*`匹配路径段中的零个或多个字符
+- `**`匹配零个或多个路径段
+
+还可以使用`@PathVariable`声明URI变量并访问它们的值：
+```java
+@GetMapping("/owners/{ownerId}/pets/{petId}")
+public Pet findPet(@PathVariable Long ownerId, @PathVariable Long petId) {
+    // ...
+}
+```
+
+URI变量可以在类和方法级别声明：
+```java
+@Controller
+@RequestMapping("/owners/{ownerId}")
+public class OwnerController {
+
+    @GetMapping("/pets/{petId}")
+    public Pet findPet(@PathVariable Long ownerId, @PathVariable Long petId) {
+        // ...
+    }
+}
+```
+
+URI变量自动转换为合适的类型或类型不匹配时抛出`TypesMismatchException`。默认情况下支持简单类型 - `int`，`long`，`Date`，你可以注册对任何其他数据类型的支持。请参见[类型转换]()和[数据绑定器]()。
+URI变量可以明确命名 - 例如`@PathVariable（"customId"）`，但是如果名称相同并且你的代码是使用调试信息或使用Java 8上的-`parameters`编译器标志编译的，则可以保留该详细信息。
+语法`{varName:regex}`声明一个带有正则表达式的URI变量，其语法为`{varName:regex}` - 例如给定URL`"/spring-web-3.0.5.jar"`，使用以下方法提取名称，版本和文件扩展名：
+```java
+@GetMapping("/{name:[a-z-]+}-{version:\\d\\.\\d\\.\\d}{ext:\\.[a-z]+}")
+public void handle(@PathVariable String version, @PathVariable String ext) {
+    // ...
+}
+```
+
+URI路径模式还可以嵌入`${…​}`占位符，这些占位符在启动时通过`PropertyPlaceHolderConfigurer`针对本地，系统，环境和其他属性源进行解析。例如，这可用于基于某些外部配置参数化基本URL。
+
+#### 模式比较
+当多个模式与URL匹配时，必须对它们进行比较以找到最佳匹配。这是通过`AntPathMatcher.getPatternComparator(String path)`完成的，它查找更具体的模式。
+如果URI变量的数量较少且单个通配符计为1且双通配符计为2，则模式的特定性较低。给定相等的分数，选择较长的模式。给定相同的分数和长度，选择具有比通配符更多的URI变量的模式。
+默认映射模式`/**`从评分中排除，并始终排在最后。此外，诸如`/public/**`之类的前缀模式被认为不符合双通配符的其他模式的特定性。
+有关完整的详细信息，请参阅`AntPathMatcher`中的`AntPatternComparator`，并记住可以自定义使用的`PathMatcher`实现。请参阅配置部分中的[路径匹配]()。
+
+#### 后缀匹配
+默认情况下，Spring MVC执行".*"后缀模式匹配，以便映射到`/person`的控制器也隐式映射到`/person.*`。然后使用文件扩展名来解析响应请求的内容类型（即，代替"Accept"请求头），例如，`/person.pdf`,`/person.xml`等
+当浏览器发送难以保持一致的Accept请求头时，必须使用这样的文件扩展名。目前，这也不是必须的，使用"Accept"请求头应该是首选。
+随着时间的推移，文件扩展名的使用已经证明在各种方面存在问题。当使用URI变量，路径参数，URI编码进行重叠时，它可能会导致歧义，并且还使得很难推断基于URL的授权和安全性（有关更多详细信息，请参阅下一节）。
+要完全禁用文件扩展名，必须同时设置以下两项：
+- `useSuffixPatternMatching(false)`,请参阅[PathMatchConfigurer]()
+- `favorPathExtension(false)`,请参阅[ContentNeogiationConfigurer]()
+
+基于URL的内容协商仍然有用，例如在浏览器中键入URL时。为了实现这一点，建议使用基于查询参数的策略来避免文件扩展名带来的大多数问题。或者，如果必须使用文件扩展名，请考虑通过[ContentNeogiationConfigurer]()的`mediaTypes`属性将它们限制为显式注册的扩展名列表。
+
+#### 后缀匹配和RFD(reflected file download)
+反射文件下载（RFD）攻击类似于XSS，因为它依赖于请求输入，例如查询参数，URI变量，反映在响应中。但是，RFD攻击不是将JavaScript插入HTML，而是依赖浏览器切换来执行下载，并在以后双击时将响应视为可执行脚本。
+在Spring中，MVC `@ResponseBody`和`ResponseEntity`方法存在风险，因为它们可以通过URL路径扩展请求渲染给客户端不同内容类型。禁用后缀模式匹配以及使用路径扩展进行内容协商可降低风险，但不足以防止RFD攻击。
+为了防止RFD攻击，在渲染响应主体之前，Spring MVC添加了一个`Content-Disposition:inline;filename=f.txt`请求头来确保一个固定且安全的下载文件。仅当URL路径包含既未列入白名单也未明确注册以用于内容协商目的的文件扩展名时，才会执行此操作。但是，当直接在浏览器中输入URL时，它可能会产生副作用。
