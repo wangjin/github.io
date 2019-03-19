@@ -1,27 +1,27 @@
 language: node_js
 
 node_js:
- - 7
+  - 7
 
 cache:
- directories:
-  - node_modules
+  directories:
+    - node_modules
 
 before_install:
   - export TZ='Asia/Shanghai'
   - npm install -g hexo-cli
 
 install:
- - npm install
+  - npm install
 
 script:
- - hexo clean
- - hexo g
+  - hexo clean
+  - hexo g
 
 after_script:
- - git config --global user.email "wangjin-252@hotmail.com"
- - git config --global user.name "wangjin252"
- - sed -i "s/GITHUB_TOKEN/${GITHUB_TOKEN}/g" ./_config.yml
- - sed -i "s/ALGOLIA_APIKEY/${ALGOLIA_APIKEY}/g" ./_config.yml
- - sed -i "s/ALGOLIA_ADMINAPIKEY/${ALGOLIA_ADMINAPIKEY}/g" ./_config.yml
- - hexo d
+  - git config --global user.email "wangjin-252@hotmail.com"
+  - git config --global user.name "wangjin"
+  - sed -i "s/GITHUB_TOKEN/${GITHUB_TOKEN}/g" ./_config.yml
+  - sed -i "s/ALGOLIA_APIKEY/${ALGOLIA_APIKEY}/g" ./_config.yml
+  - sed -i "s/ALGOLIA_ADMINAPIKEY/${ALGOLIA_ADMINAPIKEY}/g" ./_config.yml
+  - hexo d
