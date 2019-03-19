@@ -8,7 +8,7 @@ subtitle:
 description:
 author: JUSTKIDDING
 language: zh-Hans
-timezone:
+timezone: Asia/Shanghai
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
@@ -69,14 +69,13 @@ theme: next
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: https://GITHUB_TOKEN@github.com/wangjin252/wangjin252.github.io.git
-#  repo: git@github.com:wangjin252/wangjin252.github.io.git
+  repo: https://GITHUB_TOKEN@github.com/wangjin/wangjin.github.io.git
+  #  repo: git@github.com:wangjin252/wangjin252.github.io.git
   branch: master
 
-
 algolia:
-  applicationID: '6R0Z9QTPH0'
+  applicationID: "6R0Z9QTPH0"
   apiKey: ALGOLIA_APIKEY
   adminApiKey: ALGOLIA_ADMINAPIKEY
-  indexName: 'blog'
+  indexName: "blog"
   chunkSize: 5000
